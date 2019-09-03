@@ -82,15 +82,6 @@ body {
   background-color: #111;
 }
 
-@media screen and (max-width:720px) {
-  .mid-nav {
-    display: none;
-  }
-
-  .left-nav {
-    width: 100%;
-  }
-}
 
 /*  Nav bar end */
 
@@ -176,4 +167,30 @@ footer .contact {
 .copyright {
   text-align: center;
   padding-bottom: 8px;
+}
+
+
+
+
+@media screen and (max-width:750px) {
+  .nav-bar {
+    position: relative;
+  }
+
+  .mid-nav {
+    display: none;
+  }
+
+  .left-nav {
+    width: 100%;
+  }
+  #project_id{
+    height: 200px;
+  }
+  .project1,
+  .project2 {
+    margin: 12px;
+    padding: 0px;
+  }
+
 }
