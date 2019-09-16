@@ -8,8 +8,29 @@ body {
   background-size: cover;*/
   background-color: #111;
   color: aliceblue;
+  
 }
 
+.bgimg-1, .bgimg-2, .bgimg-3 {
+  position: relative;
+  opacity: 0.80;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-top: 55px;
+  padding-top: 12px;
+}
+.bgimg-1 {
+  background-image: url("../img/parallax-1.jpg");
+  min-height: 100%;
+}
+/* Turn off parallax scrolling for tablets and phones */
+@media only screen and (max-device-width: 1024px) {
+  .bgimg-1, .bgimg-2, .bgimg-3 {
+    background-attachment: scroll;
+  }
+}
 .nav-bar {
   display: flex;
   width: 100%;
@@ -20,6 +41,7 @@ body {
   margin: 0;
   position: fixed;
   top: 0;
+  z-index: 5000;
 }
 
 .nav-bar>div {
@@ -86,32 +108,40 @@ body {
 /*  Nav bar end */
 
 .pro_pic {
-  margin-top: 7%;
   display: flex;
   justify-content: center;
   /* align horizontal */
   align-items: center;
+  margin-top: 20px;
 }
 
 .intro {
+  margin:0px 22%;
   margin-top: 2%;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Verdana, sans-serif;
   text-align: center;
-  font-size: 25px;
+  font-size: 23px;
+  color: aliceblue;
+  background-color: #111;
+  padding: 1%;
 }
 
 .details_about {
   margin-top: 2%;
+  margin-left: 22%;;
+  margin-right: 22%;
   font-size: 16px;
   text-align: center;
   font-family: Arial, Helvetica, sans-serif;
+  background-color: #111;
+  padding: 1%;
 }
 
 /* Project part */
 
 #project_id {
   width: 100%;
-  margin-top: 30px;
+  margin-top: 0px;
   background-image: url('../img/project.jpg');
   background-color: #cccccc;
   height: 300px;
@@ -137,6 +167,15 @@ body {
   padding: 10px 40px;
   text-align: center;
   font-family: Arial, Helvetica, sans-serif;
+  transition: transform .5s;
+}
+.project1:hover,
+.project2:hover{
+  -ms-transform: scale(1.05);
+  /* IE 9 */
+  -webkit-transform: scale(1.05);
+  /* Safari 3-8 */
+  transform: scale(1.05);
 }
 
 .project1 p,
@@ -191,6 +230,9 @@ footer .contact {
   .project2 {
     margin: 12px;
     padding: 0px;
+  }
+  .bgimg-1, .bgimg-2, .bgimg-3 {
+    margin-top: 0px;
   }
 
 }
