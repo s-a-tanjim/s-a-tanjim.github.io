@@ -7,6 +7,11 @@
     <b-collapse id="nav-collapse" is-nav>
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
+          <router-link tag="a" to="/resume" class="nav-link"
+            >Resume</router-link
+          >
+        </li>
+        <li class="nav-item">
           <router-link tag="a" to="/projects" class="nav-link"
             >Projects</router-link
           >

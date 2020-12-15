@@ -10,7 +10,7 @@
           class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 mt-4"
         >
           <div class="card-container" @click="showModal(data)">
-            <img :src="data.img_src" class="card-img" :alt="data.title" />
+            <img v-lazy="data.img_src" class="card-img" :alt="data.title" />
             <div class="mt-3" style="color: #111">
               <h5 style="font-weight: bold">{{ data.title }}</h5>
             </div>
@@ -26,7 +26,7 @@
       ok-only
     >
       <img
-        :src="modalData.img_src ? modalData.img_src : ''"
+        v-lazy="modalData.img_src ? modalData.img_src : ''"
         class="modal-img"
         :alt="modalData.title ? modalData.title : ''"
       />

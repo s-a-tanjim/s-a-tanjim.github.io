@@ -17,7 +17,12 @@ import {
 } from './routes'
 
 Vue.use(VueRouter);
-Vue.use(VueLazyload);
+Vue.use(VueLazyload, {
+  preLoad: 1.3,
+  error: 'img/error.svg',
+  loading: 'img/img_loader_lazyload.gif',
+  attempt: 1
+});
 Vue.use(BootstrapVue)
 
 const progressbarOptions = {
