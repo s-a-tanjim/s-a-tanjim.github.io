@@ -20,6 +20,10 @@ export default {
   },
   mounted() {
     this.$Progress.finish();
+    console.log(
+      "%c ",
+      "font-size:800px; background:url(https://s-a-tanjim.netlify.app/img/console.jpg) no-repeat;"
+    );
   },
   created() {
     this.$Progress.start();

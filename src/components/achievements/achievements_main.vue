@@ -43,6 +43,12 @@ export default {
     return {
       projects: [
         {
+          title: "Best Junior Team",
+          description:
+            "Best Junior Team in Intra MIST Programming and Gaming Contest 2018 organised by Department of Computer Science and Engineering, MIST.",
+          img_src: "img/achievements/contest.jpg",
+        },
+        {
           title: "2nd runners up in 'Robo War'",
           description:
             "2nd runners up in 'Robo War' segment of special program for 'Digital Bangladesh Day' organised by 'A2i innovation lab'. The team (MIST Robowarriors) consists of Shafayetul Islam, Ahasan Siddique, Shoeb Ahmed Tanjim",

@@ -19,6 +19,11 @@ a:focus {
   outline: none !important;
 }
 
+hr {
+  margin: 90px 0px !important;
+  border-top: 2px solid #fff !important;
+}
+
 .modal-title {
   color: #111 !important;
 }

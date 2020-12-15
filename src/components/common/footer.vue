@@ -5,7 +5,7 @@
         <div class="col-sm-12 col-md-6">
           <h6>About</h6>
           <p class="text-justify">
-            It's a portfolio Website created by
+            It's a portfolio website created by
             <a href="https://s-a-tanjim.github.io/" target="_blank"
               >s-a-tanjim</a
             >.
@@ -49,6 +49,11 @@
 
         <div class="col-md-4 col-sm-6 col-xs-12">
           <ul class="social-icons">
+            <li>
+              <a class="gmail" href="mailto:shoebtanjim@gmail.com">
+                <i class="far fa-envelope"></i>
+              </a>
+            </li>
             <li>
               <a
                 class="github"
@@ -225,6 +230,9 @@ export default {};
 }
 .social-icons a.github:hover {
   background-color: #747474;
+}
+.social-icons a.gmail:hover {
+  background-color: #ea4335;
 }
 @media (max-width: 767px) {
   .social-icons li.title {

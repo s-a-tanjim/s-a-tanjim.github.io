@@ -14,4 +14,8 @@ export const routes = [{
   path: "/",
   name: "Home",
   component: () => import("./components/home/home_main.vue"),
+}, {
+  path: "/*",
+  name: "404Error",
+  component: () => import("./components/404page/404_main.vue"),
 }, ]

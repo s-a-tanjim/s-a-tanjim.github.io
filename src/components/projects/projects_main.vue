@@ -95,6 +95,22 @@ export default {
           img_src: "img/project/uvcpurge.jpg",
           project_link: "https://youtu.be/hXhjbASMYH0",
         },
+        {
+          title: "Expatriate Escort",
+          description:
+            "It's a group project developed by Muhtasim Fuad, Swapnil Protik, Nishanul Nishat, Fahim Faisal & Shoeb Ahmed Tanjim. It's a community website where Bangladeshi people in abroad can help each other.",
+          img_src: "img/project/expatriateescort.jpg",
+          project_link:
+            "https://github.com/ExpatriateEscort/ExpatriateEscort-V2.0",
+        },
+        {
+          title: "Dino Game Using Arduino",
+          description:
+            "It's a Microprocessor & Microcontroller sessional group project. It was developed by Naim Ibna Khadem, Munswarim Khan, Shaqran Bin Saleh & Shoeb Ahmed Tanjim. It's a simple dino game controlled by Arduino.",
+          img_src: "img/project/dino.jpg",
+          project_link:
+            "https://github.com/s-a-tanjim/Arduino/tree/master/Dino_game",
+        },
       ],
       modalData: {},
     };

@@ -20,12 +20,20 @@
         </div>
       </div>
     </div>
-    <section class="container"></section>
+    <hr />
+    <section class="container">
+      <fieldOfInterest />
+    </section>
   </div>
 </template>
 
 <script>
-export default {};
+import fieldOfInterest from "./field_of_interest";
+export default {
+  components: {
+    fieldOfInterest,
+  },
+};
 </script>
 
 <style scoped>
