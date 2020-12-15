@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
+body {
+  background-color: #2c2f33 !important;
+  color: #fff !important;
+  font-family: 'Space Mono', monospace !important;
+}
+
+a {
+  text-decoration: none !important;
+  font-weight: bold;
+}
+
+button:focus {
+  outline: none !important;
+}
+
+a:focus {
+  outline: none !important;
+}
+
+hr {
+  margin: 90px 0px !important;
+  border-top: 2px solid #fff !important;
+}
+
+.modal-title {
+  color: #111 !important;
+}
+
+.pr-mc {
+  text-align: right;
+}
+
+.pl-mc {
+  text-align: left;
+}
+
+@media screen and (max-width: 991px) {
+  .pr-mc {
+    text-align: center;
+  }
+
+  .pl-mc {
+    text-align: center;
+  }
+}
