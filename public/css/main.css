@@ -1,18 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
 
-body {
-  background-color: #2c2f33 !important;
-  color: #fff !important;
-  font-family: 'Space Mono', monospace !important;
-}
-
 a {
-  text-decoration: none !important;
   font-weight: bold;
-}
-
-button:focus {
-  outline: none !important;
 }
 
 a:focus {
@@ -24,8 +13,20 @@ hr {
   border-top: 2px solid #fff !important;
 }
 
-.modal-title {
-  color: #111 !important;
+::-moz-selection { /* Firefox */
+  color: #fff;
+  background: #585c5c;
+}
+
+::selection {
+  color: #fff;
+  background: #585c5c;
+}
+
+.icon-40{
+  height: 40px;
+  width: 40px;
+  cursor: pointer;
 }
 
 .pr-mc {

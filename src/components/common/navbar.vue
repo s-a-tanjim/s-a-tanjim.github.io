@@ -1,10 +1,20 @@
 <template>
-  <b-navbar toggleable="lg" type="dark" variant="dark">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <router-link tag="a" to="/" class="navbar-brand">Home</router-link>
 
-    <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-    <b-collapse id="nav-collapse" is-nav>
+    <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
           <router-link tag="a" to="/resume" class="nav-link"
@@ -22,8 +32,8 @@
           >
         </li>
       </ul>
-    </b-collapse>
-  </b-navbar>
+    </div>
+  </nav>
 </template>
 
 <script>

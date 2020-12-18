@@ -4,12 +4,6 @@ import VueRouter from 'vue-router'
 import VueLazyload from 'vue-lazyload'
 import VueProgressBar from 'vue-progressbar'
 import {
-  BootstrapVue
-} from 'bootstrap-vue'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-
-import {
   store
 } from './store'
 import {
@@ -23,7 +17,6 @@ Vue.use(VueLazyload, {
   loading: 'img/img_loader_lazyload.gif',
   attempt: 1
 });
-Vue.use(BootstrapVue)
 
 const progressbarOptions = {
   color: '#13a2e2',

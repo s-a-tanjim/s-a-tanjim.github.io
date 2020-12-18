@@ -18,26 +18,12 @@
         </div>
       </div>
     </section>
-
-    <b-modal
-      id="achievementModal"
-      centered
-      :title="modalData.title ? modalData.title : ''"
-      ok-only
-    >
-      <img
-        v-lazy="modalData.img_src ? modalData.img_src : ''"
-        class="modal-img"
-        :alt="modalData.title ? modalData.title : ''"
-      />
-      <p class="my-4" style="color: #111 !important">
-        {{ modalData.description ? modalData.description : "" }}
-      </p>
-    </b-modal>
+    <modal :data="modalData" ref="modal" />
   </div>
 </template>
 
 <script>
+import modal from "../common/modal";
 export default {
   data() {
     return {
@@ -66,14 +52,23 @@ export default {
             "Champion in Robo Fest 2018 organised by 'MIST'. The team (MIST Robowarriors) consists of Shafayetul Islam, Ahasan Siddique, Farabi Hossain, Shoeb Ahmed Tanjim",
           img_src: "img/achievements/robofest.jpg",
         },
+        /*{
+          title: "Commandant appreciation award 2019",
+          description:
+            "",
+          img_src: "img/achievements/robofest.jpg",
+        },*/
       ],
       modalData: {},
     };
   },
+  components: {
+    modal,
+  },
   methods: {
     showModal(data) {
       this.modalData = data;
-      this.$bvModal.show("achievementModal");
+      this.$refs['modal'].openModal();
     },
   },
 };

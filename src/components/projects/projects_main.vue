@@ -19,29 +19,12 @@
       </div>
     </section>
 
-    <b-modal
-      id="projectModal"
-      centered
-      :title="modalData.title ? modalData.title : ''"
-      ok-only
-    >
-      <img
-        v-lazy="modalData.img_src ? modalData.img_src : ''"
-        class="modal-img"
-        :alt="modalData.title ? modalData.title : ''"
-      />
-      <p class="my-4" style="color: #111 !important">
-        {{ modalData.description ? modalData.description : "" }}
-      </p>
-      <p style="color: #111 !important" v-if="modalData.project_link">
-        Project link:
-        <a :href="modalData.project_link" target="_blank">here</a>
-      </p>
-    </b-modal>
+    <modal :data="modalData" ref="modal" />
   </div>
 </template>
 
 <script>
+import modal from "../common/modal";
 export default {
   data() {
     return {
@@ -104,21 +87,32 @@ export default {
             "https://github.com/ExpatriateEscort/ExpatriateEscort-V2.0",
         },
         {
-          title: "Dino Game Using Arduino",
+          title: "T-rectus Femoris",
           description:
-            "It's a Microprocessor & Microcontroller sessional group project. It was developed by Naim Ibna Khadem, Munswarim Khan, Shaqran Bin Saleh & Shoeb Ahmed Tanjim. It's a simple dino game controlled by Arduino.",
+            "It's a simple dino game controlled by Microcontroller. It's a Microprocessor & Microcontroller sessional group project. It was developed by Naim Ibna Khadem, Munswarim Khan, Shaqran Bin Saleh & Shoeb Ahmed Tanjim.",
           img_src: "img/project/dino.jpg",
           project_link:
             "https://github.com/s-a-tanjim/Arduino/tree/master/Dino_game",
         },
+        /*{
+          title: "Drawbot",
+          description:
+            "DRAWBOT is a semi-autonomous robot which will utilize depth image processing to make a 3D map of an area for surveying. It will be monitoring of behavior, activities, or information for the purpose of information gathering, influencing, managing or directing.",
+          img_src: "img/project/dino.jpg",
+          project_link:
+            "https://github.com/s-a-tanjim/Arduino/tree/master/Dino_game",
+        },*/
       ],
       modalData: {},
     };
   },
+  components: {
+    modal,
+  },
   methods: {
     showModal(data) {
       this.modalData = data;
-      this.$bvModal.show("projectModal");
+      this.$refs["modal"].openModal();
     },
   },
 };
