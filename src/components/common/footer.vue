@@ -63,7 +63,7 @@
                 <i class="fab fa-github"></i>
               </a>
             </li>
-            <li>
+            <!--<li>
               <a
                 class="facebook"
                 href="https://www.facebook.com/s.a.tanjim"
@@ -80,7 +80,7 @@
               >
                 <i class="fab fa-twitter"></i>
               </a>
-            </li>
+            </li>-->
             <li>
               <a
                 class="linkedin"
