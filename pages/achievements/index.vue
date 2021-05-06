@@ -34,37 +34,37 @@ export default {
             'Champion in UK-RAS Medical Robotics for Contagious Challenge 2020',
           description:
             'Champion in UK-RAS Medical Robotics for Contagious Challenge 2020 organised by UK-RAS hosted by Imperial College London.',
-          img_src: 'img/achievements/uvc.jpg',
+          img_src: '/img/achievements/uvc.jpg',
         },
         {
           title: 'Best Junior Team',
           description:
             'Best Junior Team in Intra MIST Programming and Gaming Contest 2018 organised by Department of Computer Science and Engineering, MIST.',
-          img_src: 'img/achievements/contest.jpg',
+          img_src: '/img/achievements/contest.jpg',
         },
         {
           title: "2nd runners up in 'Robo War'",
           description:
             "2nd runners up in 'Robo War' segment of special program for 'Digital Bangladesh Day' organised by 'A2i innovation lab'. The team (MIST Robowarriors) consists of Shafayetul Islam, Ahasan Siddique, Shoeb Ahmed Tanjim",
-          img_src: 'img/achievements/robowar-a2i.jpg',
+          img_src: '/img/achievements/robowar-a2i.jpg',
         },
         {
           title: "Champion in 'Robo War'",
           description:
             "Champion in 'Robo War' segment of NDITC_init 2019 organised by 'Notre Dame College, Dhaka'. The team (MIST Robowarriors) consists of Shafayetul Islam, Ahasan Siddique, Farabi Hossain, Shoeb Ahmed Tanjim",
-          img_src: 'img/achievements/nditc.jpg',
+          img_src: '/img/achievements/nditc.jpg',
         },
         {
           title: "Champion in 'Robo Fest 2018'",
           description:
             "Champion in Robo Fest 2018 organised by 'MIST'. The team (MIST Robowarriors) consists of Shafayetul Islam, Ahasan Siddique, Farabi Hossain, Shoeb Ahmed Tanjim",
-          img_src: 'img/achievements/robofest.jpg',
+          img_src: '/img/achievements/robofest.jpg',
         },
         /*{
           title: "Commandant appreciation award 2019",
           description:
             "",
-          img_src: "img/achievements/robofest.jpg",
+          img_src: "/img/achievements/robofest.jpg",
         },*/
       ],
       modalData: {},
