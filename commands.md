@@ -1,26 +1,18 @@
 # s-a-tanjim.github.io
 
-## Project setup
-```
-npm install
-```
+## Build Setup
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+```bash
+# install dependencies
+$ npm install
 
-### Compiles and minifies for production
-```
-npm run build
-```
+# serve with hot reload at localhost:3000
+$ npm run dev
 
-### Lints and fixes files
-```
-npm run lint
-```
+# build for production and launch server
+$ npm run build
+$ npm run start
 
-## Bootstrap Compile
-```
-gulp watch
+# generate static project
+$ npm run generate
 ```
