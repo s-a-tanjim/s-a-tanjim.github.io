@@ -10,9 +10,10 @@
           <h3>Hi there</h3>
           <p>
             This is Shoeb Ahmed Tanjim. A Full Stack Developer at
-            <a href="https://www.bitechx.com" target="_blank">BiTechX</a>. I'm an
-            undergraduate student of Department of Computer Science and
-            Engineering at Military Institute of Science and Technology.
+            <a rel="noopener" href="https://www.bitechx.com" target="_blank"
+              >BiTechX</a
+            >. I'm an undergraduate student of Department of Computer Science
+            and Engineering at Military Institute of Science and Technology.
           </p>
           <p>
             Programming is what I love most and Travelling is what I enjoy most!
