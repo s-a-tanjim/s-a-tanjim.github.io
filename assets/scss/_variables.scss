@@ -1,0 +1,19 @@
+:root {
+  --font-family: 'Space Mono', Roboto, sans-serif;
+}
+
+.dark-mode {
+  --bg-primary: #2c2f33;
+  --bg-secondary: #343a40;
+  --color-primary: #ffffff;
+  --color-secondary: #737373;
+  --color-hover: #3366cc;
+}
+
+.light-mode {
+  --bg-primary: #ffffff;
+  --bg-secondary: #737373;
+  --color-primary: #2c2f33;
+  --color-secondary: #343a40;
+  --color-hover: #3366cc;
+}
