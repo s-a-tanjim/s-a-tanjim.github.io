@@ -1,9 +1,9 @@
 <template>
   <div>
     <main-navbar />
-    <hr />
-    <section class="container">
-      <div class="row align-items-center my-5">
+    <hr class="dashed-hr" />
+    <section class="container home">
+      <div class="row align-items-center my-5 height">
         <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 pr-mc">
           <img src="/img/sat.jpg" class="dp-img" alt="Photo" />
         </div>
@@ -14,14 +14,14 @@
         </div>
       </div>
     </section>
-    <hr />
+    <hr class="dashed-hr" />
     <section class="container my-5 text-center">
       <div>
         <h3>My Experties</h3>
         <home-experties-table />
       </div>
     </section>
-    <hr />
+    <hr class="dashed-hr" />
     <section class="container my-5">
       <div>
         <h3>About Me</h3>
@@ -42,6 +42,47 @@ export default {}
 </script>
 
 <style scoped>
+.home:before {
+  background-image: radial-gradient(rgba(51, 85, 255, 0.3) 15%, transparent 0),
+    radial-gradient(rgba(51, 85, 255, 0.3) 15%, transparent 0);
+  background-image: radial-gradient(rgba(136, 153, 255, 0.4) 15%, transparent 0),
+    radial-gradient(rgba(136, 153, 255, 0.4) 15%, transparent 0);
+  background-size: 0.75rem 0.75rem;
+  background-position: 0 0, 0.375rem 0.375rem;
+  -webkit-clip-path: polygon(
+    100% 8%,
+    88% 8%,
+    50% 8%,
+    100% 45%,
+    100% 100%,
+    50% 100%,
+    0 70%,
+    0 100%,
+    100% 100%
+  );
+  clip-path: polygon(
+    100% 8%,
+    88% 8%,
+    50% 8%,
+    100% 45%,
+    100% 100%,
+    50% 100%,
+    0 70%,
+    0 100%,
+    100% 100%
+  );
+  content: '';
+  height: 760px;
+  left: 50%;
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  width: 100vw;
+  z-index: -1;
+}
+.height {
+  min-height: 600px;
+}
 .dp-img {
   max-width: 250px;
   width: 100%;

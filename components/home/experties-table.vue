@@ -5,12 +5,18 @@
       <div>JavaScript</div>
       <div>Python</div>
       <div>C++</div>
+      <div>Bash</div>
+      <div>HTML5</div>
+      <div>CSS|SCSS</div>
     </div>
     <div class="field">
       <div>Frameworks</div>
+      <div>Laravel</div>
       <div>ExpressJS</div>
       <div>Django</div>
+      <div>VueJS</div>
       <div>NuxtJS</div>
+      <div>Bootstrap</div>
     </div>
     <div class="field">
       <div>Database</div>
@@ -19,16 +25,22 @@
       <div>Firebase</div>
     </div>
     <div class="field">
-      <div>AWS</div>
-      <div>S3</div>
-      <div>EC2</div>
-      <div>RDS</div>
+      <div>Infrastructure</div>
+      <div>AWS | S3</div>
+      <div>AWS | EC2</div>
+      <div>AWS | RDS</div>
+      <div>API</div>
+      <div>SPA | PWA</div>
+      <div>SSR</div>
     </div>
     <div class="field">
       <div>Tools</div>
+      <div>Linux</div>
       <div>Docker</div>
       <div>Git</div>
       <div>Jira</div>
+      <div>Google SEO</div>
+      <div>Bluehost</div>
     </div>
   </div>
 </template>
