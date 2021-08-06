@@ -3,12 +3,10 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12 col-md-6">
-          <h6>About</h6>
+          <h6>contact me</h6>
           <p class="text-justify">
-            It's a portfolio website created by
-            <a href="https://s-a-tanjim.github.io/" target="_blank"
-              >s-a-tanjim</a
-            >.
+            Feel free to reach out to me for any kind of new opportunities or if
+            you have any queries.
           </p>
         </div>
 

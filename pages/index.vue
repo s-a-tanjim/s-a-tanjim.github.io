@@ -17,13 +17,17 @@
     <hr class="dashed-hr" />
     <section class="container my-5 text-center">
       <div>
-        <h3>My Experties</h3>
+        <h3 class="my-5">My Experties</h3>
         <home-experties-table />
       </div>
     </section>
     <hr class="dashed-hr" />
     <section class="container my-5">
-      <div>
+      <home-works />
+    </section>
+    <hr class="dashed-hr" />
+    <section class="container my-5">
+      <div class="about-me text-center">
         <h3>About Me</h3>
         <p>
           Hi there! I'm an undergraduate student of Department of Computer
@@ -87,5 +91,9 @@ export default {}
   max-width: 250px;
   width: 100%;
   border-radius: 50%;
+}
+.about-me {
+  max-width: 650px;
+  margin: auto;
 }
 </style>
