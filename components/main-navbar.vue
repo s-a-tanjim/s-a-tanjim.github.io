@@ -1,35 +1,34 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <NuxtLink tag="a" to="/" class="navbar-brand">Home</NuxtLink>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <NuxtLink tag="a" to="/" class="navbar-brand ms-2">Home</NuxtLink>
 
     <button
-      class="navbar-toggler"
+      class="navbar-toggler me-2"
       type="button"
-      data-toggle="collapse"
-      data-target="#navbarNav"
-      aria-controls="navbarNav"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
       aria-expanded="false"
       aria-label="Toggle navigation"
     >
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ml-auto">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto">
         <li class="nav-item">
-          <NuxtLink tag="a" to="/resume" class="nav-link"
-            >Resume</NuxtLink
-          >
+          <NuxtLink tag="a" to="/resume" class="nav-link">Resume</NuxtLink>
         </li>
         <li class="nav-item">
-          <NuxtLink tag="a" to="/projects" class="nav-link"
-            >Projects</NuxtLink
-          >
+          <NuxtLink tag="a" to="/works" class="nav-link">Works</NuxtLink>
         </li>
         <li class="nav-item">
           <NuxtLink tag="a" to="/achievements" class="nav-link"
             >Achievements</NuxtLink
           >
+        </li>
+        <li class="nav-item">
+          <NuxtLink tag="a" to="/about" class="nav-link">About</NuxtLink>
         </li>
       </ul>
     </div>
@@ -37,11 +36,11 @@
 </template>
 
 <script>
-export default {};
+export default {}
 </script>
 
 <style scoped>
 .nuxt-link-exact-active {
-  color: #fff !important;
+  color: var(--color-primary) !important;
 }
 </style>

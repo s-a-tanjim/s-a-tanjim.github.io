@@ -1,0 +1,17 @@
+.pr-mc {
+  text-align: right;
+}
+
+.pl-mc {
+  text-align: left;
+}
+
+@media screen and (max-width: 991px) {
+  .pr-mc {
+    text-align: center;
+  }
+
+  .pl-mc {
+    text-align: center;
+  }
+}

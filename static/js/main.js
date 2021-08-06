@@ -27,3 +27,5 @@ printImage = function (url, size = 60) {
 };
 
 printImage('https://s-a-tanjim.netlify.app/img/console.jpg');
+console.log("Thanks for visiting! \u2665");
+console.log("This website was designed & developed by s-a-tanjim");

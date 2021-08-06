@@ -1,0 +1,11 @@
+/* Text Select */
+::-moz-selection {
+  /* Firefox */
+  color: #fff;
+  background: #585c5c;
+}
+
+::selection {
+  color: #fff;
+  background: #585c5c;
+}

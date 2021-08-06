@@ -22,8 +22,8 @@
             </h5>
             <button
               type="button"
-              class="close"
-              data-dismiss="modal"
+              class="btn-close"
+              data-bs-dismiss="modal"
               aria-label="Close"
             >
               <span aria-hidden="true">&times;</span>
@@ -47,7 +47,7 @@
             <button
               type="button"
               class="btn btn-secondary"
-              data-dismiss="modal"
+              data-bs-dismiss="modal"
             >
               Close
             </button>
@@ -61,17 +61,43 @@
 <script>
 export default {
   props: ['data'],
+  data() {
+    return {
+      main_modal: null,
+    }
+  },
+  mounted() {
+    if (typeof bootstrap != 'undefined')
+      this.main_modal = new bootstrap.Modal(
+        document.getElementById('MainModal'),
+        {
+          keyboard: false,
+        }
+      )
+  },
   methods: {
     openModal() {
-      if (window && window.$ && window.$('#MainModal')) {
-        window.$('#MainModal').modal('show')
+      if (this.main_modal) this.main_modal.show()
+      else if (typeof bootstrap != 'undefined') {
+        this.main_modal = new bootstrap.Modal(
+          document.getElementById('MainModal'),
+          {
+            keyboard: false,
+          }
+        )
       }
+      /*if (window && window.$ && window.$('#MainModal')) {
+        window.$('#MainModal').modal('show')
+      }*/
     },
   },
 }
 </script>
 
 <style scoped>
+a {
+  color: #111 !important;
+}
 .modal-title {
   color: #111 !important;
 }

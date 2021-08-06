@@ -53,12 +53,17 @@ export default {
         href: 'https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap',
         rel: 'stylesheet',
       },
+      {
+        href: 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css',
+        rel: 'stylesheet',
+        integrity: "sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC",
+        crossorigin: "anonymous"
+      },
     ],
     script: [{
-        src: '/js/jquery-3.5.1.slim.min.js'
-      },
-      {
-        src: '/js/bootstrap.bundle.min.js'
+        src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js',
+        integrity: "sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM",
+        crossorigin: "anonymous"
       },
       {
         async: true,
@@ -82,9 +87,7 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
-    '@/assets/css/bootstrap.min.css',
-    '@/assets/css/main.css',
-    '@/assets/vendor/fontawesome-free/css/all.min.css',
+    '~/assets/scss/main.scss',
   ],
 
   /*script: [{
@@ -106,7 +109,9 @@ export default {
   components: true,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: [],
+  buildModules: [
+    '@nuxtjs/color-mode'
+  ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [],

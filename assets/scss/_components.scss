@@ -1,0 +1,39 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-primary);
+  color: var(--color-primary);
+}
+
+a {
+  text-decoration: none;
+  font-weight: bold;
+  color: var(--color-primary);
+
+  &:hover {
+    color: var(--color-hover) !important;
+  }
+  &:focus {
+    outline: none;
+  }
+}
+
+.dashed-hr {
+  padding: 0px;
+  margin: 0px;
+  border: 2px dashed var(--color-primary);
+  color: var(--bg-primary);
+  opacity: 0.9;
+}
+
+.icon-40 {
+  height: 40px;
+  width: 40px;
+  cursor: pointer;
+}
