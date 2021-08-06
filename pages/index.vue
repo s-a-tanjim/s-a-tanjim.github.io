@@ -81,7 +81,7 @@ export default {}
   position: absolute;
   top: 0;
   transform: translateX(-50%);
-  width: 100vw;
+  width: 100%;
   z-index: -1;
 }
 .height {
