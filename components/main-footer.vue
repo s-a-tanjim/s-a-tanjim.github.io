@@ -61,7 +61,7 @@ export default {}
   margin: 20px 0;
 }
 .site-footer h6 {
-  color: var(--color-primary);
+  color: #fff;
   font-size: 16px;
   text-transform: uppercase;
   margin-top: 5px;
