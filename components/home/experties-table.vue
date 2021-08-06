@@ -5,6 +5,7 @@
       <div>JavaScript</div>
       <div>Python</div>
       <div>C++</div>
+      <div>PHP</div>
       <div>Bash</div>
       <div>HTML5</div>
       <div>CSS|SCSS</div>

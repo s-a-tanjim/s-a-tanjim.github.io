@@ -46,4 +46,9 @@ export default {}
 .nuxt-link-exact-active {
   color: var(--color-primary) !important;
 }
+@media (max-width: 991px) {
+  .navbar-nav a {
+    margin-left: 10px;
+  }
+}
 </style>
