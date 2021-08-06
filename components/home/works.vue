@@ -75,6 +75,7 @@ export default {}
   bottom: 0px;
   left: -80px;
   text-align: right;
+  color: var(--footer-txt);
 }
 .made-with {
   font-size: 0.8em;
