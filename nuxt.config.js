@@ -28,6 +28,10 @@ export default {
         content: 's-a-tanjim'
       },
       {
+        property: 'og:type',
+        content: 'website'
+      },
+      {
         property: 'og:description',
         content: 's-a-tanjim | Personal Website'
       },
