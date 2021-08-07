@@ -1,25 +1,5 @@
 <template>
   <div>
-    <main-navbar />
-    <hr class="dashed-hr" />
-    <div style="position: relative">
-      <div class="mode-change-container">
-        <img
-          class="light-mode-img"
-          :class="{ hide: $colorMode.value == 'light' }"
-          src="/img/icons/sun.svg"
-          alt="Light"
-          @click="$colorMode.preference = 'light'"
-        />
-        <img
-          class="dark-mode-img"
-          :class="{ hide: $colorMode.value == 'dark' }"
-          src="/img/icons/moon.svg"
-          alt="Dark"
-          @click="$colorMode.preference = 'dark'"
-        />
-      </div>
-    </div>
     <section class="container home">
       <div class="row align-items-center my-5 height">
         <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 pr-mc">
@@ -60,32 +40,13 @@
 </template>
 
 <script>
-export default {}
+import themeSwitch from '~/components/theme-switch.vue'
+export default {
+  components: { themeSwitch },
+}
 </script>
 
 <style scoped>
-/* Mode slider */
-.hide {
-  display: none;
-}
-.mode-change-container {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-}
-.light-mode-img,
-.dark-mode-img {
-  height: 30px;
-  width: 30px;
-  cursor: pointer;
-  -webkit-transition: all 0.2s linear;
-  transition: all 0.2s linear;
-}
-.light-mode-img:hover,
-.dark-mode-img:hover {
-  -webkit-transform: scale(1.1);
-  transform: scale(1.1);
-}
 .home:before {
   background-image: radial-gradient(var(--bg-dotted-1) 15%, transparent 0),
     radial-gradient(var(--bg-dotted-1) 15%, transparent 0);

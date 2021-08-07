@@ -10,6 +10,9 @@
     <!--<div class="side-img-container">
       <div class="bar" :class="{'transformation':loaded}"></div>
     </div>-->
+    <main-navbar />
+    <hr class="dashed-hr" />
+    <theme-switch />
     <Nuxt />
   </div>
 </template>

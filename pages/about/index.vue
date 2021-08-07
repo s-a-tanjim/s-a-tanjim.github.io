@@ -1,6 +1,5 @@
 <template>
   <div>
-    <main-navbar />
     <section class="container mt-5" style="text-align: center; height: 58vh">
       <h3>About Me</h3>
       <div>Under Construction</div>

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <main-navbar />
     <section class="container mt-5" style="text-align: center">
       <h3>Some of my projects</h3>
 

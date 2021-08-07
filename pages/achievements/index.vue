@@ -1,6 +1,5 @@
 <template>
   <div>
-    <main-navbar />
     <section class="container mt-5" style="text-align: center">
       <h3>Some of my Achievements</h3>
 
@@ -29,6 +28,12 @@ export default {
   data() {
     return {
       projects: [
+        {
+          title: 'Topped in University Rover Challenge(URC) 2021',
+          description:
+            'University Rover Challenge is one of the most prestigious robotics challenge organised by Mars Society, USA.',
+          img_src: '/img/achievements/urc.jpg',
+        },
         {
           title:
             'Champion in UK-RAS Medical Robotics for Contagious Challenge 2020',

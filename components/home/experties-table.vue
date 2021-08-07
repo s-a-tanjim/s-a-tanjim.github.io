@@ -12,8 +12,8 @@
     </div>
     <div class="field">
       <div>Frameworks</div>
-      <div>Laravel</div>
       <div>ExpressJS</div>
+      <div>Laravel</div>
       <div>Django</div>
       <div>VueJS</div>
       <div>NuxtJS</div>
@@ -65,6 +65,7 @@ export default {}
 
 .field div:nth-child(1) {
   font-weight: bold;
+  font-size: 1.2em;
   background-color: var(--bg-secondary);
 }
 @media only screen and (max-width: 991px) {

@@ -33,7 +33,7 @@ export default {
       },
       {
         property: 'og:image',
-        content: 'https://s-a-tanjim.netlify.app/img/dp.jpg'
+        content: 'https://s-a-tanjim.netlify.app/img/sat.jpg'
       },
       {
         property: 'og:url',
