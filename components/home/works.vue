@@ -74,6 +74,7 @@ export default {}
   position: absolute;
   bottom: 0px;
   left: -80px;
+  z-index: 2;
   text-align: right;
   color: var(--footer-txt);
   border: 1px solid var(--color-border);

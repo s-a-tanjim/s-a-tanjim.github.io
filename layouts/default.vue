@@ -24,7 +24,9 @@ export default {
     }
   },*/
   mounted() {
-    this.$colorMode.preference = 'dark'
+    //console.log(this.$colorMode.preference);
+    //this.$colorMode.preference = 'dark'
+    //console.log(this.$colorMode.preference);
     //this.loaded = true
   },
 }

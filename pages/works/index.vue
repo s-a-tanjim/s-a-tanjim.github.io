@@ -31,9 +31,23 @@ export default {
       projects: [
         {
           title: 'E-Veil',
-          description:
-            'An underdeveloped Email Service. The aim of the project is to learn more about web development and web security. This was my level 2 term 2 project.',
+          data: [
+            {
+              subtitle: 'Overview',
+              desc: 'An underdeveloped Email Service. The aim of the project is to learn more about web development and web security. This was my level 2 term 2 project.',
+            },
+            {
+              subtitle: 'Features',
+              desc: 'User authentication system',
+            },
+            {
+              subtitle: 'Tech Stack',
+              desc: '',
+            },
+          ],
+          description: '',
           img_src: '/img/project/eveil.jpg',
+          github_link: '',
           project_link: 'https://e-veil.firebaseapp.com/',
         },
         {

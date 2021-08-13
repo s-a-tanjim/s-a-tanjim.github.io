@@ -31,7 +31,7 @@
           Hi there! I'm an undergraduate student of Department of Computer
           Science and Engineering at Military Institute of Science and
           Technology. Programming is what I love most and Travelling is what I
-          enjoy most! A pet lover but pet is not allowed at my home :')
+          enjoy most!
         </p>
       </div>
     </section>

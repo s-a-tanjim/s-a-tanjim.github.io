@@ -24,6 +24,14 @@ export default {
         content: 's-a-tanjim | Personal Website'
       },
       {
+        name: 'keywords',
+        content: 'Portfolio, Software engineer, Shoeb, Ahmed, Tanjim'
+      },
+      {
+        name: 'author',
+        content: 's-a-tanjim'
+      },
+      {
         property: 'og:title',
         content: 's-a-tanjim'
       },
@@ -93,6 +101,10 @@ export default {
   css: [
     '~/assets/scss/main.scss',
   ],
+  colorMode: {
+    preference: 'dark',
+    fallback: 'dark',
+  },
 
   /*script: [{
       src: '@/assets/js/jquery-3.5.1.slim.min.js'

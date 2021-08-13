@@ -1,7 +1,10 @@
 <template>
   <nav
     class="navbar navbar-expand-lg"
-    :class="[$colorMode.value == 'light' ? 'navbar-light' : 'navbar-dark']"
+    :class="{
+      'navbar-light': $colorMode.value === 'light',
+      'navbar-dark': $colorMode.value === 'dark',
+    }"
   >
     <NuxtLink tag="a" to="/" class="navbar-brand ms-2">Home</NuxtLink>
 

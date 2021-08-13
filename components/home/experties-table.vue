@@ -57,6 +57,7 @@ export default {}
 }
 .field {
   width: -webkit-fill-available;
+  width: -moz-available;
 }
 
 .field div {
