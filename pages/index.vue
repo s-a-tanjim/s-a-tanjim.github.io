@@ -48,10 +48,10 @@ export default {
 
 <style scoped>
 .home:before {
-  background-image: radial-gradient(var(--bg-dotted-1) 15%, transparent 0),
-    radial-gradient(var(--bg-dotted-1) 15%, transparent 0);
-  background-image: radial-gradient(var(--bg-dotted-2) 15%, transparent 0),
-    radial-gradient(var(--bg-dotted-2) 15%, transparent 0);
+  background-image: radial-gradient(var(--bg-dotted-1) 15%, transparent 0%),
+    radial-gradient(var(--bg-dotted-1) 15%, transparent 0%);
+  background-image: radial-gradient(var(--bg-dotted-2) 15%, transparent 0%),
+    radial-gradient(var(--bg-dotted-2) 15%, transparent 0%);
   background-size: 0.75rem 0.75rem;
   background-position: 0 0, 0.375rem 0.375rem;
   -webkit-clip-path: polygon(

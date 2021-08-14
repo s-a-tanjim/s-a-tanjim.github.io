@@ -1,7 +1,7 @@
 <template>
   <div>
     <section class="container mt-5" style="text-align: center">
-      <h3>Some of my Achievements</h3>
+      <h1>Some of my achievements</h1>
 
       <div class="row justify-content-center mt-3">
         <div
@@ -25,6 +25,18 @@
 
 <script>
 export default {
+  head() {
+    return {
+      title: 'Achievements | s-a-tanjim | Personal Website',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'Achievements | s-a-tanjim | Personal Website',
+        },
+      ],
+    }
+  },
   data() {
     return {
       projects: [

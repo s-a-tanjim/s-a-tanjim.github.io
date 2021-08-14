@@ -1,7 +1,7 @@
 <template>
   <div>
     <section class="container mt-5" style="text-align: center; height: 58vh">
-      <h3>About Me</h3>
+      <h1>About me</h1>
       <div>Under Construction</div>
     </section>
     <main-footer />
@@ -9,7 +9,20 @@
 </template>
 
 <script>
-export default {}
+export default {
+  head() {
+    return {
+      title: 'About | s-a-tanjim | Personal Website',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'About | s-a-tanjim | Personal Website',
+        },
+      ],
+    }
+  },
+}
 </script>
 
 <style>

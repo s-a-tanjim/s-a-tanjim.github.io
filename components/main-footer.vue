@@ -37,7 +37,8 @@
       <hr />
     </div>
     <div class="container text-center">
-      Copyright &copy; 2021 All Rights Reserved by
+      <!--Copyright &copy; 2021 All Rights Reserved by-->
+      Designed and developed by
       <a href="https://s-a-tanjim.github.io/" target="_blank">s-a-tanjim</a>.
     </div>
   </footer>
