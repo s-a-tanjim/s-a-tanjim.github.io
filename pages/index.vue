@@ -15,8 +15,8 @@
     <hr class="dashed-hr" />
     <section class="container my-5 text-center">
       <div>
-        <h3 class="my-5">My Experties</h3>
-        <home-experties-table />
+        <h3 class="my-5">My Expertise</h3>
+        <home-expertise-table />
       </div>
     </section>
     <hr class="dashed-hr" />

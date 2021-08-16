@@ -24,6 +24,25 @@ a {
   }
 }
 
+.btn {
+  &:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    &:active {
+      outline: none !important;
+      box-shadow: none !important;
+    }
+  }
+  &:active {
+    outline: none !important;
+    box-shadow: none !important;
+    &:focus {
+      outline: none !important;
+      box-shadow: none !important;
+    }
+  }
+}
+
 .dashed-hr {
   padding: 0px;
   margin: 0px;
