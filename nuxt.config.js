@@ -21,11 +21,11 @@ export default {
       {
         hid: 'description',
         name: 'description',
-        content: 's-a-tanjim | Personal Website'
+        content: 'Shoeb Ahmed Tanjim | Full Stack Engineer'
       },
       {
         name: 'keywords',
-        content: 'Portfolio, Software engineer, Shoeb, Ahmed, Tanjim'
+        content: 'Portfolio, Software engineer, Shoeb Ahmed Tanjim, Full Stack Engineer, MIST'
       },
       {
         name: 'author',
@@ -41,7 +41,7 @@ export default {
       },
       {
         property: 'og:description',
-        content: 's-a-tanjim | Personal Website'
+        content: 'Shoeb Ahmed Tanjim | Full Stack Engineer'
       },
       {
         property: 'og:image',
@@ -50,6 +50,22 @@ export default {
       {
         property: 'og:url',
         content: 'https://s-a-tanjim.netlify.app'
+      },
+      {
+        property: 'twitter:title',
+        content: 's-a-tanjim'
+      },
+      {
+        property: 'twitter:creator',
+        content: 's-a-tanjim'
+      },
+      {
+        property: 'twitter:description',
+        content: 'Shoeb Ahmed Tanjim | Full Stack Engineer'
+      },
+      {
+        property: 'twitter:image',
+        content: 'https://s-a-tanjim.netlify.app/img/sat.jpg'
       }
     ],
     link: [{
@@ -66,16 +82,25 @@ export default {
         rel: 'stylesheet',
       },
       {
+        href: '/bootstrap/main.css',
+        rel: 'stylesheet',
+      },
+      /*{
         href: 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css',
         rel: 'stylesheet',
         integrity: "sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC",
         crossorigin: "anonymous"
-      },
+      },*/
     ],
-    script: [{
-        src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js',
-        integrity: "sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM",
-        crossorigin: "anonymous"
+    script: [
+      /*{
+              src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js',
+              integrity: "sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM",
+              crossorigin: "anonymous"
+            },*/
+      {
+        async: true,
+        src: '/bootstrap/main.js',
       },
       {
         async: true,
@@ -105,18 +130,6 @@ export default {
     preference: 'dark',
     fallback: 'dark',
   },
-
-  /*script: [{
-      src: '@/assets/js/jquery-3.5.1.slim.min.js'
-    },
-    {
-      src: '@/assets/js/bootstrap.bundle.min.js'
-    }
-  ],*/
-  /*script: [
-    '@/assets/js/jquery-3.5.1.slim.min.js',
-    '@/assets/js/bootstrap.bundle.min.js'
-  ],*/
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [],

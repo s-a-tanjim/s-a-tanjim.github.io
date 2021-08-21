@@ -9,6 +9,13 @@
           <img
             class="work-img"
             src="/img/works/hootstory.jpg"
+            srcset="
+              /img/works/hootstory-600.jpg   600w,
+              /img/works/hootstory-800.jpg   800w,
+              /img/works/hootstory-1200.jpg 1200w,
+              /img/works/hootstory.jpg      1900w
+            "
+            sizes="500px"
             alt="Hootstory"
           />
           <div class="img-mask"></div>
@@ -29,7 +36,18 @@
     <div class="work-container my-5">
       <div class="img-container hover-zoom">
         <a href="https://playmusic-z.firebaseapp.com/" target="_blank">
-          <img class="work-img" src="/img/works/musicapp.jpg" alt="Hootstory" />
+          <img
+            class="work-img"
+            src="/img/works/musicapp.jpg"
+            srcset="
+              /img/works/musicapp-600.jpg   600w,
+              /img/works/musicapp-800.jpg   800w,
+              /img/works/musicapp-1200.jpg 1200w,
+              /img/works/musicapp.jpg      1900w
+            "
+            sizes="500px"
+            alt="Music App"
+          />
           <div class="img-mask"></div>
         </a>
       </div>

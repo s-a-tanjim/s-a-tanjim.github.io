@@ -3,7 +3,18 @@
     <section class="container home">
       <div class="row align-items-center my-5 height">
         <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 pr-mc">
-          <img src="/img/sat.jpg" class="dp-img" alt="Photo" />
+          <img
+            src="/img/sat.jpg"
+            srcset="
+              /img/sat-250.jpg 250w,
+              /img/sat-300.jpg 300w,
+              /img/sat-400.jpg 400w,
+              /img/sat.jpg     600w
+            "
+            sizes="250px"
+            class="dp-img"
+            alt="Avatar"
+          />
         </div>
         <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 pl-mc">
           <div>Hi there! This is</div>
@@ -89,13 +100,19 @@ export default {
   min-height: 600px;
 }
 .dp-img {
-  max-width: 250px;
-  width: 100%;
+  width: 250px;
+  height: 250px;
   border: 2px solid #563673;
   border-radius: 50%;
 }
 .about-me {
   max-width: 650px;
   margin: auto;
+}
+@media screen and (max-width: 991px) {
+  .dp-img {
+    width: 200px;
+    height: 200px;
+  }
 }
 </style>

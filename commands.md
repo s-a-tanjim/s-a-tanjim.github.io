@@ -1,6 +1,16 @@
 # s-a-tanjim.github.io
 
-## Build Setup
+# Building Process
+The building process has two steps. 1) Build bootstrap & 2) Build the app.
+
+## Build Bootstrap
+```bash
+# Go to bootstrap root dir
+$ cd bootstrap
+# build bootstrap
+$ npm run build
+```
+## Build the app
 
 ```bash
 # install dependencies
