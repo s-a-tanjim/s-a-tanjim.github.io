@@ -4,7 +4,7 @@
     <p>Looks like you have lost somewhere</p>
     <p>Let's go back to home!</p>
     <nuxt-link to="/">
-      <img class="icon-40" src="/img/icons/home.svg" alt="Home" />
+      <icons-home class="home-icon" />
     </nuxt-link>
   </div>
 </template>
@@ -16,7 +16,17 @@ export default {}
 <style  scoped>
 .error-404 {
   text-align: center;
-  margin: 100px auto;
+  padding-top: 100px;
   font-size: 1.5em;
+  height: 63vh;
+}
+.home-icon {
+  height: 50px;
+  width: 50px;
+}
+</style>
+<style>
+.home-icon path {
+  fill: var(--color-primary);
 }
 </style>

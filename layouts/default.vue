@@ -14,6 +14,7 @@
     <hr class="dashed-hr" />
     <theme-switch />
     <Nuxt />
+    <main-footer />
   </div>
 </template>
 <script >

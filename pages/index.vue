@@ -46,7 +46,6 @@
         </p>
       </div>
     </section>
-    <main-footer />
   </div>
 </template>
 

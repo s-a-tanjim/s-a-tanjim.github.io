@@ -8,7 +8,6 @@
       <img src="/cv/cv-img-1.png" class="my-1" style="width: 100%" alt="CV" />
       <img src="/cv/cv-img-2.png" class="my-1" style="width: 100%" alt="CV" />
     </div>
-    <main-footer />
   </div>
 </template>
 
@@ -16,7 +15,7 @@
 export default {
   head() {
     return {
-      title: 'Resume | s-a-tanjim | Personal Website',
+      title: 'Resume | s-a-tanjim',
       meta: [
         {
           hid: 'description',

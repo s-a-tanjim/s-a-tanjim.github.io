@@ -4,7 +4,6 @@
       <h1>About me</h1>
       <div>Under Construction</div>
     </section>
-    <main-footer />
   </div>
 </template>
 
@@ -12,7 +11,7 @@
 export default {
   head() {
     return {
-      title: 'About | s-a-tanjim | Personal Website',
+      title: 'About | s-a-tanjim',
       meta: [
         {
           hid: 'description',
