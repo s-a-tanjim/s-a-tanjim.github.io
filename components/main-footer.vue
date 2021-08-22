@@ -12,7 +12,7 @@
 
         <div class="col-xs-6 col-md-6">
           <div class="social-icons">
-            <a class="gmail" href="mailto:shoebtanjim@gmail.com">
+            <a class="gmail" :href="email">
               <icons-email class="svg-icon" />
             </a>
 
@@ -45,7 +45,21 @@
 </template>
 
 <script>
-export default {}
+export default {
+  data() {
+    return {
+      email: '',
+    }
+  },
+  mounted() {
+    const z = '.com'
+    const d = 'tanjim'
+    const x = 'gmail'
+    const b = 'shoeb'
+    const a = 'mailto:'
+    this.email = a + b + d + '@' + x + z
+  },
+}
 </script>
 
 <style scoped>

@@ -45,11 +45,11 @@ export default {
       },
       {
         property: 'og:image',
-        content: 'https://s-a-tanjim.netlify.app/img/sat.jpg'
+        content: 'https://tanjim.me/img/sat.jpg'
       },
       {
         property: 'og:url',
-        content: 'https://s-a-tanjim.netlify.app'
+        content: 'https://tanjim.me'
       },
       {
         property: 'twitter:title',
@@ -65,13 +65,17 @@ export default {
       },
       {
         property: 'twitter:image',
-        content: 'https://s-a-tanjim.netlify.app/img/sat.jpg'
+        content: 'https://tanjim.me/img/sat.jpg'
       }
     ],
     link: [{
         rel: 'icon',
         type: 'image/x-icon',
         href: '/favicon.svg'
+      },
+      {
+        rel: 'canonical',
+        href: 'https://tanjim.me'
       },
       {
         rel: 'preconnect',
