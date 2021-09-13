@@ -31,6 +31,20 @@
             >
               <icons-linkedin class="svg-icon" />
             </a>
+            <a
+              class="medium"
+              href="https://medium.com/@satanjim"
+              target="_blank"
+            >
+              <icons-medium class="svg-icon" />
+            </a>
+            <a
+              class="stackoverflow"
+              href="https://stackoverflow.com/users/12639184/sat"
+              target="_blank"
+            >
+              <icons-stackoverflow class="svg-icon" />
+            </a>
           </div>
         </div>
       </div>
@@ -144,6 +158,18 @@ export default {
   margin-right: -2px;
 }
 
+.medium .svg-icon {
+  height: 22px;
+  width: 22px;
+}
+
+.stackoverflow .svg-icon {
+  height: 24px;
+  width: 24px;
+  margin-right: 1px;
+  margin-bottom: 1px;
+}
+
 .social-icons a.facebook:hover {
   background-color: #3b5998;
 }
@@ -159,15 +185,18 @@ export default {
 .social-icons a.gmail:hover {
   background-color: #ea4335;
 }
+.social-icons a.stackoverflow:hover {
+  background-color: #ff9800;
+}
 </style>
 <style >
-.site-footer .linkedin:hover path {
+.site-footer .linkedin:hover path,
+.site-footer .github:hover path,
+.site-footer .gmail:hover path,
+.site-footer .medium:hover path {
   fill: #fff !important;
 }
-.site-footer .github:hover path {
-  fill: #fff !important;
-}
-.site-footer .gmail:hover path {
+.site-footer .stackoverflow:hover svg {
   fill: #fff !important;
 }
 </style>

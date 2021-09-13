@@ -45,7 +45,7 @@ export default {
       },
       {
         property: 'og:image',
-        content: 'https://tanjim.me/img/sat.jpg'
+        content: 'https://tanjim.me/site-thumbnail.jpg'
       },
       {
         property: 'og:url',
@@ -65,7 +65,7 @@ export default {
       },
       {
         property: 'twitter:image',
-        content: 'https://tanjim.me/img/sat.jpg'
+        content: 'https://tanjim.me/site-thumbnail.jpg'
       }
     ],
     link: [{
