@@ -31,7 +31,7 @@
             >
               <icons-linkedin class="svg-icon" />
             </a>
-            <a
+            <!--<a
               class="medium"
               href="https://medium.com/@satanjim"
               target="_blank"
@@ -44,7 +44,7 @@
               target="_blank"
             >
               <icons-stackoverflow class="svg-icon" />
-            </a>
+            </a>-->
           </div>
         </div>
       </div>
@@ -53,7 +53,7 @@
     <div class="container text-center">
       <!--Copyright &copy; 2021 All Rights Reserved by-->
       Designed and developed by
-      <a href="https://s-a-tanjim.github.io/" target="_blank">s-a-tanjim</a>.
+      <a href="https://github.com/s-a-tanjim" target="_blank">s-a-tanjim</a>.
     </div>
   </footer>
 </template>
