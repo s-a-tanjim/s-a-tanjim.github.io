@@ -1,22 +1,29 @@
 <template>
   <div>
-    <div class="btns-container mb-4">
-      <button
-        @click="selectedTab = 1"
-        class="btn btn-secondary"
-        :class="{ active: selectedTab == 1 }"
+    <div class="mb-4">
+      <label for="expertise-options">On: </label>
+      <select
+        v-model="selectedTab"
+        name="expertise-options"
+        class="expertise-options"
       >
-        Software Development
-      </button>
-      <button
-        @click="selectedTab = 2"
-        class="btn btn-secondary"
-        :class="{ active: selectedTab == 2 }"
-      >
-        Robotics
-      </button>
+        <option
+          value="1"
+          class="btn btn-secondary"
+          :class="{ active: selectedTab == '1' }"
+        >
+          Fullstack Development
+        </option>
+        <option
+          value="2"
+          class="btn btn-secondary"
+          :class="{ active: selectedTab == '2' }"
+        >
+          Robotics
+        </option>
+      </select>
     </div>
-    <div :class="[selectedTab === 1 ? 'show' : 'hide']">
+    <div :class="[selectedTab === '1' ? 'show' : 'hide']">
       <div class="exp-table">
         <div class="field">
           <div>Languages</div>
@@ -57,13 +64,12 @@
           <div>Linux</div>
           <div>Docker</div>
           <div>Git</div>
-          <div>Jira</div>
           <div>Google SEO</div>
           <div>Bluehost</div>
         </div>
       </div>
     </div>
-    <div :class="[selectedTab === 2 ? 'show' : 'hide']">
+    <div :class="[selectedTab === '2' ? 'show' : 'hide']">
       <div class="exp-table">
         <div class="field">
           <div>Languages</div>
@@ -92,16 +98,26 @@
 export default {
   data() {
     return {
-      selectedTab: 1,
+      selectedTab: '1',
     }
   },
 }
 </script>
 
 <style scoped>
-.btns-container {
-  display: flex;
-  justify-content: space-around;
+.expertise-options {
+  outline: none;
+  background-color: #565e64;
+  border-color: #565e64;
+  color: #fff;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.expertise-options:active {
+  outline: none;
+}
+.expertise-options option {
+  cursor: pointer;
 }
 .exp-table {
   display: flex;

@@ -103,6 +103,12 @@ export default {
   height: 250px;
   border: 2px solid #563673;
   border-radius: 50%;
+  transition: transform 0.3s;
+}
+.dp-img:hover {
+  cursor: move;
+  border: 3px solid #784ca1;
+  transform: scale(1.02);
 }
 .about-me {
   max-width: 650px;

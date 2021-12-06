@@ -31,14 +31,14 @@
             >
               <icons-linkedin class="svg-icon" />
             </a>
-            <!--<a
+            <a
               class="medium"
               href="https://medium.com/@satanjim"
               target="_blank"
             >
               <icons-medium class="svg-icon" />
             </a>
-            <a
+            <!--<a
               class="stackoverflow"
               href="https://stackoverflow.com/users/12639184/sat"
               target="_blank"
