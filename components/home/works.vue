@@ -24,8 +24,8 @@
       <div class="work-desc-container">
         <h3>Hootstory</h3>
         <div class="work-desc">
-          A story posting web-app developing for BiTechX. Currently I'm working
-          on both frontend and backend with the BiTechX team.
+          A story posting web-app developing for BiTechX. I worked for both
+          frontend and backend with the BiTechX team.
         </div>
         <div class="made-with">
           <div>Made with</div>

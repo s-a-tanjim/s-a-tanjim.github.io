@@ -52,6 +52,12 @@ export default {
           img_src: '/img/achievements/urc.jpg',
         },
         {
+          title: 'Champion in Hackathon 2021',
+          description:
+            'Champion in Hackathon for the nation at ICT Innovation Fest 2021 organized by Department of Computer Science and Engineering, MIST',
+          img_src: '/img/achievements/innovation-fest.jpg',
+        },
+        {
           title:
             'Champion in UK-RAS Medical Robotics for Contagious Challenge 2020',
           description:

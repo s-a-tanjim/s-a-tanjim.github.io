@@ -8,8 +8,9 @@
         <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
           <p>I'm Tanjim, an undergrad student from Dhaka.</p>
           <p>
-            Currently working at BiTechX as a full stack developer. Here I works
-            for clients and develops internal platforms.
+            Currently completing my graduation from Military Institute of
+            Science and Technology. Besides my study I works as a full stack
+            developer.
           </p>
         </div>
         <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
