@@ -36,6 +36,10 @@
     </section>
     <hr class="dashed-hr" />
     <section class="container my-5">
+      <home-timeline />
+    </section>
+    <hr class="dashed-hr" />
+    <section class="container my-5">
       <div class="about-me text-center">
         <h3>About Me</h3>
         <p>
