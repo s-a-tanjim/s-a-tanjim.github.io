@@ -101,7 +101,6 @@ p {
 }
 .timelines h2 {
   text-align: center;
-  color: #fff;
   /*font-weight: 600;*/
   font-weight: 200;
   margin-bottom: 40px;
@@ -125,7 +124,7 @@ p {
   margin: auto;
   height: 100%;
   width: 2px;
-  background: #a3aee2 /* #efa22f*/;
+  background: #69729f /* #efa22f*/;
   top: 20px;
 }
 .single-timeline {
@@ -142,13 +141,11 @@ p {
   position: relative;
 }
 .timeline-text h6 {
-  color: #f0f1f2;
   font-weight: 900;
   display: inline-block;
   font-size: 1rem;
 }
 .timeline-text span {
-  color: #f0f1f2;
   display: block;
   width: 100%;
 }
@@ -161,7 +158,7 @@ p {
   width: 12px;
   height: 12px;
   left: -6px;
-  background: #a3aee2 /*#efa22f*/;
+  background: #69729f /*#efa22f*/;
 }
 .single-timeline:nth-child(even) {
   -webkit-box-orient: horizontal;

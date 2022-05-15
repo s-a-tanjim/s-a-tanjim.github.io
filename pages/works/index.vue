@@ -61,12 +61,12 @@ export default {
     return {
       projects: [
         {
-          title: 'Hootstory',
+          title: 'Hootstory V1',
           description:
             "A story posting web-app developing for BiTechX. I worked for both frontend and backend with the BiTechX team.",
           features: '',
           tech_stack: 'NuxtJS | Laravel | AWS | Docker',
-          img_src: '/img/project/eveil.jpg',
+          img_src: '/img/works/hootstory-600.jpg',
           github_link: '',
           live_site: 'https://hootstory.com',
         },
