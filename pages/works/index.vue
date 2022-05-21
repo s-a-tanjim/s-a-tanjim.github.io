@@ -1,40 +1,64 @@
 <template>
   <div>
     <section class="container mt-5">
-      <div style="text-align: center" class="mb-3">
-        <h1>Some of my works</h1>
-      </div>
-
-      <div
-        v-for="(data, index) in projects"
-        v-bind:key="index"
-        class="card-container"
-      >
-        <div class="img-container">
-          <img :src="data.img_src" class="card-img" :alt="data.title" />
+      <div>
+        <div style="text-align: center" class="my-5">
+          <h1>Some of my publications</h1>
         </div>
-        <div class="info-container p-3" style="color: #111">
-          <div>
-            <h5 style="font-weight: bold">{{ data.title }}</h5>
+        <div
+          v-for="(data, index) in publications"
+          v-bind:key="index"
+          class="research-container"
+        >
+          <p>
+            {{ data.authors }}
+            <span class="title-text"> {{ '"' + data.title + '". ' }}</span>
+            <span> {{ data.publisher }} </span>
+          </p>
+          <p>
+            Paper Link:
+            <a :href="data.link" target="_blank" rel="noopener noreferrer"
+              >Here</a
+            >
+          </p>
+        </div>
+      </div>
+      <div>
+        <div style="text-align: center" class="my-5">
+          <h1>Some of my works</h1>
+        </div>
 
-            {{ data.description }}
+        <div
+          v-for="(data, index) in projects"
+          v-bind:key="index"
+          class="card-container"
+        >
+          <div class="img-container">
+            <img :src="data.img_src" class="card-img" :alt="data.title" />
           </div>
-          <div style="text-align: right; font-weight: bold" class="mt-2">
-            {{ data.tech_stack }}
-            <div class="icon-container mt-2">
-              <a
-                v-if="data.github_link"
-                :href="data.github_link"
-                target="_blank"
-              >
-                <img src="/img/icons/github.svg" alt="Github" />
-              </a>
-              <a v-if="data.demo_link" :href="data.demo_link" target="_blank">
-                <img src="/img/icons/play-button.svg" alt="Video" />
-              </a>
-              <a v-if="data.live_site" :href="data.live_site" target="_blank">
-                <img src="/img/icons/world.svg" alt="Website" />
-              </a>
+          <div class="info-container p-3" style="color: #111">
+            <div>
+              <h5 style="font-weight: bold">{{ data.title }}</h5>
+
+              {{ data.description }}
+            </div>
+            <div style="text-align: right; font-weight: bold" class="mt-2">
+              {{ data.tech_stack }}
+              <div class="icon-container mt-2">
+                <a
+                  v-if="data.github_link"
+                  :href="data.github_link"
+                  target="_blank"
+                >
+                  <img src="/img/icons/github.svg" alt="Github" />
+                </a>
+                <a v-if="data.demo_link" :href="data.demo_link" target="_blank">
+                  <img src="/img/icons/play-button.svg" alt="Video" />
+                </a>
+                <a v-if="data.live_site" :href="data.live_site" target="_blank">
+                  <img src="/img/icons/world.svg" alt="Website" />
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -59,11 +83,32 @@ export default {
   },
   data() {
     return {
+      publications: [
+        {
+          authors:
+            'Zaman, A., Majib, M. S., Tanjim, S. A., Siddique, S. M. A., Islam, Ashraf, F., ... & Rahman, M. M.',
+          title:
+            'Phoenix: Towards Designing and Developing a Human Assistant Rover',
+          publisher:
+            'IEEE Access, vol. 10, pp. 50728-50754, 2022, doi: 10.1109/ACCESS.2022.3170908.',
+          link: 'https://ieeexplore.ieee.org/document/9764737',
+          doi: 'https://doi.org/10.1109/ACCESS.2022.3170908',
+        },
+        {
+          authors:
+            'Zaman, A., Majib, M. S., Tanjim, S. A., Siddique, S. M. A., Islam, S., Aadeeb, M. S., ... & Islam, M. N.',
+          title:
+            'UVC-PURGE: A Novel Cost-effective Disinfection Robot for combating COVID-19 Pandemic',
+          publisher:
+            'IEEE Access, vol. 10, pp. 37613-37634, 2022, doi: 10.1109/ACCESS.2022.3163243.',
+          link: 'https://ieeexplore.ieee.org/document/9745041',
+        },
+      ],
       projects: [
         {
           title: 'Hootstory V1',
           description:
-            "A story posting web-app developing for BiTechX. I worked for both frontend and backend with the BiTechX team.",
+            'A story posting web-app developing for BiTechX. I worked for both frontend and backend with the BiTechX team.',
           features: '',
           tech_stack: 'NuxtJS | Laravel | AWS | Docker',
           img_src: '/img/works/hootstory-600.jpg',
@@ -79,6 +124,17 @@ export default {
           img_src: '/img/project/musicplayer.jpg',
           github_link: '',
           live_site: 'https://playmusic-z.firebaseapp.com/',
+        },
+        {
+          title: 'DarkTab',
+          description:
+            "A task management web-app. It was built to learn browser's internal storage system.",
+          features: '',
+          tech_stack: 'PWA | IndexedDB | NuxtJS | JavaScript ',
+          img_src: '/img/works/darktab.png',
+          github_link:
+            'https://github.com/s-a-tanjim/websites/tree/master/DarkTab',
+          live_site: 'https://dark-tab.web.app',
         },
         {
           title: 'BitCopy',
@@ -163,6 +219,20 @@ export default {
 </script>
 
 <style scoped>
+.research-container {
+  margin: 20px 0px;
+  padding: 20px 20px;
+  background-color: #f5f5f5;
+  color: #111;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+.research-container .title-text{
+  color: #1942b1;
+}
+.research-container a {
+  color: var(--color-hover) !important;
+}
 .card-container {
   margin: 20px 0px;
   background-color: #f5f5f5;
