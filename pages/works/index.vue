@@ -173,7 +173,7 @@ export default {
           tech_stack: '',
           img_src: '/img/project/eveil.jpg',
           github_link: '',
-          live_site: 'https://e-veil.firebaseapp.com/',
+          live_site: 'https://e-veil.web.app/',
         },{
           title: 'BitFileManager',
           description:
