@@ -3,4 +3,4 @@ Disallow: /cgi-bin/
 Disallow: /tanjim.jpg
 Disallow: /cv/*.png$
 
-Sitemap: https://tanjim.me/sitemap.xml
+Sitemap: https://s-a-tanjim.netlify.app/sitemap.xml

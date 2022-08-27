@@ -21,7 +21,7 @@ export default {
       {
         hid: 'description',
         name: 'description',
-        content: 'Shoeb Ahmed Tanjim | Full Stack Engineer'
+        content: 'Shoeb Ahmed Tanjim | Software Engineer'
       },
       {
         name: 'keywords',
@@ -41,15 +41,15 @@ export default {
       },
       {
         property: 'og:description',
-        content: 'Shoeb Ahmed Tanjim | Full Stack Engineer'
+        content: 'Shoeb Ahmed Tanjim | Software Engineer'
       },
       {
         property: 'og:image',
-        content: 'https://tanjim.me/site-thumbnail.jpg'
+        content: 'https://s-a-tanjim.netlify.app/site-thumbnail.jpg'
       },
       {
         property: 'og:url',
-        content: 'https://tanjim.me'
+        content: 'https://s-a-tanjim.netlify.app'
       },
       {
         property: 'twitter:title',
@@ -61,11 +61,11 @@ export default {
       },
       {
         property: 'twitter:description',
-        content: 'Shoeb Ahmed Tanjim | Full Stack Engineer'
+        content: 'Shoeb Ahmed Tanjim | Software Engineer'
       },
       {
         property: 'twitter:image',
-        content: 'https://tanjim.me/site-thumbnail.jpg'
+        content: 'https://s-a-tanjim.netlify.app/site-thumbnail.jpg'
       }
     ],
     link: [{
@@ -75,7 +75,7 @@ export default {
       },
       {
         rel: 'canonical',
-        href: 'https://tanjim.me'
+        href: 'https://s-a-tanjim.netlify.app'
       },
       {
         rel: 'preconnect',
