@@ -13,7 +13,7 @@
     <main-navbar />
     <hr class="dashed-hr" />
     <theme-switch />
-    <Nuxt />
+    <slot />
     <main-footer />
   </div>
 </template>

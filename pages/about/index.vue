@@ -31,20 +31,18 @@
   </div>
 </template>
 
+<script setup>
+useHead({
+  title: 'About | s-a-tanjim',
+  meta: [{
+    name: 'description',
+    content: 'About | s-a-tanjim | Personal Website'  
+  }]
+})
+</script>
+
 <script>
 export default {
-  head() {
-    return {
-      title: 'About | s-a-tanjim',
-      meta: [
-        {
-          hid: 'description',
-          name: 'description',
-          content: 'About | s-a-tanjim | Personal Website',
-        },
-      ],
-    }
-  },
   data() {
     return {
       imgUrl: '/img/me/about-img-blur.jpg',

@@ -11,21 +11,14 @@
   </div>
 </template>
 
-<script>
-export default {
-  head() {
-    return {
-      title: 'Resume | s-a-tanjim',
-      meta: [
-        {
-          hid: 'description',
-          name: 'description',
-          content: 'Resume | s-a-tanjim | Personal Website',
-        },
-      ],
-    }
-  },
-}
+<script setup>
+useHead({
+  title: 'Resume | s-a-tanjim',
+  meta: [{
+    name: 'description',
+    content: 'Resume | s-a-tanjim | Personal Website'  
+  }]
+})
 </script>
 
 <style scoped>

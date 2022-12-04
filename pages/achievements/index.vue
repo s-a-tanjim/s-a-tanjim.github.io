@@ -28,20 +28,18 @@
   </div>
 </template>
 
+<script setup>
+useHead({
+  title: 'Achievements | s-a-tanjim',
+  meta: [{
+    name: 'description',
+    content: 'Achievements | s-a-tanjim | Personal Website'  
+  }]
+})
+</script>
+
 <script>
 export default {
-  head() {
-    return {
-      title: 'Achievements | s-a-tanjim',
-      meta: [
-        {
-          hid: 'description',
-          name: 'description',
-          content: 'Achievements | s-a-tanjim | Personal Website',
-        },
-      ],
-    }
-  },
   data() {
     return {
       projects: [
