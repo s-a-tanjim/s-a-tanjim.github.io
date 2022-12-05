@@ -119,16 +119,15 @@ export default defineNuxtConfig({
     '~/assets/scss/main.scss',
   ],
 
-
   modules: [
     '@nuxtjs/color-mode'
   ],
 
-  // colorMode: {
-  //   preference: 'dark',
-  //   fallback: 'dark',
-  // },
-  
+  colorMode: {
+    // preference: 'system',
+    preference: 'dark',
+    fallback: 'dark',
+  }
 
   // target: 'static',
 
