@@ -1,11 +1,10 @@
 <template>
-  <div class="error-404" title="404">
-    <h1>404!</h1>
-    <p>Looks like you have lost somewhere</p>
-    <p>Let's go back to home!</p>
-    <nuxt-link to="/">
-      <icons-home class="home-icon" />
-    </nuxt-link>
+  <div>
+    <main-navbar />
+    <hr class="dashed-hr" />
+    <theme-switch />
+    <error-404 />
+    <main-footer />
   </div>
 </template>
 

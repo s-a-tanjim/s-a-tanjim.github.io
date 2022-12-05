@@ -8,11 +8,6 @@
     </nuxt-link>
   </div>
 </template>
-
-<script>
-export default {}
-</script>
-
 <style  scoped>
 .error-404 {
   text-align: center;

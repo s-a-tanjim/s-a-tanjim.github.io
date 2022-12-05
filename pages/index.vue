@@ -19,7 +19,7 @@
         <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 pl-mc">
           <div>Hi there! This is</div>
           <h1>Shoeb Ahmed Tanjim</h1>
-          <p>A Full Stack Developer</p>
+          <p>A Software Engineer</p>
         </div>
       </div>
     </section>
