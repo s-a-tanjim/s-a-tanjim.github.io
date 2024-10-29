@@ -34,6 +34,8 @@ $ npx nuxi generate
 ```
 
 ## Testing with http server
-```
-$ python3 -m http.server 9000
+```sh
+cd dist
+
+python3 -m http.server 9000
 ```

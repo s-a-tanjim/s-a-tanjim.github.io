@@ -2,7 +2,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       charset: 'utf-16',
-      title: 's-a-tanjim | Personal Website',
+      title: 'Shoeb Ahmed Tanjim',
       htmlAttrs: {
         lang: 'en'
       },
@@ -127,7 +127,9 @@ export default defineNuxtConfig({
     // preference: 'system',
     preference: 'dark',
     fallback: 'dark',
-  }
+  },
+
+  compatibilityDate: '2024-10-29'
 
   // target: 'static',
 

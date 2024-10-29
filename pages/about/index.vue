@@ -6,11 +6,10 @@
       </div>
       <div class="row mt-5">
         <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-          <p>I'm Tanjim, an undergrad student from Dhaka.</p>
+          <p>I'm Shoeb, from Dhaka.</p>
           <p>
-            Currently completing my graduation from Military Institute of
-            Science and Technology. Besides my study I works as a full stack
-            developer.
+            Currently working as DevOps engineer. Completed my BSc from Military Institute of
+            Science and Technology. Programming is what I love most, and traveling is what I enjoy most!
           </p>
         </div>
         <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">

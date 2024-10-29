@@ -24,32 +24,20 @@
       </div>
     </section>
     <hr class="dashed-hr" />
-    <section class="container my-5 text-center">
+    <!-- <section class="container my-5 text-center">
       <div>
         <h3 class="my-5">My Expertise</h3>
         <home-expertise-table />
       </div>
-    </section>
-    <hr class="dashed-hr" />
-    <section class="container my-5">
+    </section> -->
+    <!-- <hr class="dashed-hr" /> -->
+    <!-- <section class="container my-5">
       <home-works />
-    </section>
-    <hr class="dashed-hr" />
-    <section class="container my-5">
+    </section> -->
+    <!-- <hr class="dashed-hr" /> -->
+    <!-- <section class="container my-5">
       <home-timeline />
-    </section>
-    <hr class="dashed-hr" />
-    <section class="container my-5">
-      <div class="about-me text-center">
-        <h3>About Me</h3>
-        <p>
-          Hi there! I'm an undergraduate student of Department of Computer
-          Science and Engineering at Military Institute of Science and
-          Technology. Programming is what I love most and Travelling is what I
-          enjoy most!
-        </p>
-      </div>
-    </section>
+    </section> -->
   </div>
 </template>
 

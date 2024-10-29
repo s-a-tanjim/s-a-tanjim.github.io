@@ -52,8 +52,11 @@
     </div>
     <div class="container text-center">
       <!--Copyright &copy; 2021 All Rights Reserved by-->
-      Designed and developed by
-      <a href="https://github.com/s-a-tanjim" target="_blank">s-a-tanjim</a>.
+      <div>
+        Designed and developed by
+        <a href="https://github.com/s-a-tanjim" target="_blank">s-a-tanjim</a>.
+      </div>
+      Updated on 2024
     </div>
   </footer>
 </template>

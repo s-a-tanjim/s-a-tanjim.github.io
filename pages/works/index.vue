@@ -11,8 +11,8 @@
           class="research-container"
         >
           <p>
-            {{ data.authors }}
             <span class="title-text"> {{ '"' + data.title + '". ' }}</span>
+            {{ data.authors }}
             <span> {{ data.publisher }} </span>
           </p>
           <p>
