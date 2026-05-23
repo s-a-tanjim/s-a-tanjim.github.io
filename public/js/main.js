@@ -4,28 +4,40 @@ function gtag() {
   dataLayer.push(arguments);
 }
 gtag('js', new Date());
-
 gtag('config', 'G-EFSLHHNZ5Z');
 
-/*console.log(
-  "%c ",
-  "font-size:800px; background:url(https://s-a-tanjim.netlify.app/img/console.jpg) no-repeat;"
-);*/
-
-printImage = function (url, size = 60) {
+function printImage(url, scale) {
+  scale = scale || 0.6;
   var image = new Image();
   image.onload = function () {
+    var w = this.naturalWidth;
+    var h = this.naturalHeight;
+    var src = url;
+    try {
+      var canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext('2d').drawImage(this, 0, 0);
+      src = canvas.toDataURL('image/jpeg', 0.85);
+    } catch (e) { /* tainted canvas — fall back to URL */ }
     var style = [
       'font-size: 1px;',
-      'padding: ' + this.height / 100 * size + 'px ' + this.width / 100 * size + 'px;',
-      'background: url(' + url + ') no-repeat;',
-      'background-size: contain;'
+      'line-height: ' + (h * scale) + 'px;',
+      'padding: ' + (h * scale / 2) + 'px ' + (w * scale / 2) + 'px;',
+      'background-image: url(' + src + ');',
+      'background-repeat: no-repeat;',
+      'background-size: ' + (w * scale) + 'px ' + (h * scale) + 'px;',
+      'color: transparent;'
     ].join(' ');
     console.log('%c ', style);
+    console.log('%cThanks for visiting! ♥', 'font-size: 14px; color: #ff4d6d;');
+    console.log('%cDesigned & developed by s-a-tanjim', 'font-size: 12px; color: #4FA3FF;');
+  };
+  image.onerror = function () {
+    console.log('Thanks for visiting! ♥');
+    console.log('Designed & developed by s-a-tanjim');
   };
   image.src = url;
-};
+}
 
-printImage('https://s-a-tanjim.netlify.app/img/console.jpg');
-console.log("Thanks for visiting! \u2665");
-console.log("This website was designed & developed by s-a-tanjim");
+printImage('/img/console.jpg');

@@ -1,8 +1,10 @@
+import { profile, tagline } from './data/profile'
+
 export default defineNuxtConfig({
   app: {
     head: {
       charset: 'utf-16',
-      title: 'Shoeb Ahmed Tanjim',
+      title: profile.name,
       htmlAttrs: {
         lang: 'en'
       },
@@ -16,21 +18,20 @@ export default defineNuxtConfig({
           content: 'width=device-width, initial-scale=1'
         },
         {
-          hid: 'description',
           name: 'description',
-          content: 'Shoeb Ahmed Tanjim | Software Engineer'
+          content: tagline
         },
         {
           name: 'keywords',
-          content: 'Portfolio, Software engineer, Shoeb Ahmed Tanjim, Full Stack Engineer, MIST'
+          content: `Portfolio, ${profile.role}, ${profile.name}, Full Stack Engineer, MIST`
         },
         {
           name: 'author',
-          content: 's-a-tanjim'
+          content: profile.username
         },
         {
           property: 'og:title',
-          content: 's-a-tanjim'
+          content: profile.username
         },
         {
           property: 'og:type',
@@ -38,31 +39,31 @@ export default defineNuxtConfig({
         },
         {
           property: 'og:description',
-          content: 'Shoeb Ahmed Tanjim | Software Engineer'
+          content: tagline
         },
         {
           property: 'og:image',
-          content: 'https://s-a-tanjim.netlify.app/site-thumbnail.jpg'
+          content: profile.site.thumbnail
         },
         {
           property: 'og:url',
-          content: 'https://s-a-tanjim.netlify.app'
+          content: profile.site.url
         },
         {
           property: 'twitter:title',
-          content: 's-a-tanjim'
+          content: profile.username
         },
         {
           property: 'twitter:creator',
-          content: 's-a-tanjim'
+          content: profile.username
         },
         {
           property: 'twitter:description',
-          content: 'Shoeb Ahmed Tanjim | Software Engineer'
+          content: tagline
         },
         {
           property: 'twitter:image',
-          content: 'https://s-a-tanjim.netlify.app/site-thumbnail.jpg'
+          content: profile.site.thumbnail
         }
       ],
       link: [{
@@ -72,7 +73,7 @@ export default defineNuxtConfig({
       },
       {
         rel: 'canonical',
-        href: 'https://s-a-tanjim.netlify.app'
+        href: profile.site.url
       },
       {
         rel: 'preconnect',
@@ -82,27 +83,8 @@ export default defineNuxtConfig({
         href: 'https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap',
         rel: 'stylesheet',
       },
-      {
-        href: '/bootstrap/main.css',
-        rel: 'stylesheet',
-      },
-        /*{
-          href: 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css',
-          rel: 'stylesheet',
-          integrity: "sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC",
-          crossorigin: "anonymous"
-        },*/
       ],
       script: [
-        /*{
-                src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js',
-                integrity: "sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM",
-                crossorigin: "anonymous"
-              },*/
-        {
-          async: true,
-          src: '/bootstrap/main.js',
-        },
         {
           async: true,
           src: 'https://www.googletagmanager.com/gtag/js?id=G-EFSLHHNZ5Z'
@@ -118,16 +100,6 @@ export default defineNuxtConfig({
   css: [
     '~/assets/scss/main.scss',
   ],
-
-  modules: [
-    '@nuxtjs/color-mode'
-  ],
-
-  colorMode: {
-    // preference: 'system',
-    preference: 'dark',
-    fallback: 'dark',
-  },
 
   compatibilityDate: '2024-10-29'
 

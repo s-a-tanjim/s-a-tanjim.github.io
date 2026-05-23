@@ -29,11 +29,13 @@
 </template>
 
 <script setup>
+import { profile } from '~/data/profile'
+
 useHead({
-  title: 'Achievements | s-a-tanjim',
+  title: `Achievements | ${profile.username}`,
   meta: [{
     name: 'description',
-    content: 'Achievements | s-a-tanjim | Personal Website'  
+    content: `Achievements | ${profile.username} | Personal Website`
   }]
 })
 </script>

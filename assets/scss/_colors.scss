@@ -1,19 +1,8 @@
-.bg-primary {
-  background-color: var(--bg-primary) !important;
-}
-
-.bg-secondart {
-  background-color: var(--bg-secondary) !important;
-}
-
-.color-primary {
-  color: var(--color-primary) !important;
-}
-
-.color-secondary {
-  color: var(--color-secondary) !important;
-}
-
-.color-hover:hover {
-  color: var(--color-hover) !important;
-}
+/* Inline highlight classes used by content pages.
+   Tuned for the XP light background (no syntax colors — just XP blues). */
+.kw  { color: var(--text-link); font-weight: 700; }
+.str { color: #8B4500; }
+.fn  { color: var(--text-link); }
+.ty  { color: #006666; }
+.cm  { color: #006400; font-style: italic; }
+.num { color: #8B4500; }

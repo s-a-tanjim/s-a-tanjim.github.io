@@ -18,7 +18,7 @@
 
             <a
               class="github"
-              href="https://github.com/s-a-tanjim"
+              :href="profile.socials.github"
               target="_blank"
             >
               <icons-github class="svg-icon" />
@@ -26,14 +26,14 @@
 
             <a
               class="linkedin"
-              href="https://bd.linkedin.com/in/satanjim"
+              :href="profile.socials.linkedin"
               target="_blank"
             >
               <icons-linkedin class="svg-icon" />
             </a>
             <a
               class="medium"
-              href="https://medium.com/@satanjim"
+              :href="profile.socials.blog"
               target="_blank"
             >
               <icons-medium class="svg-icon" />
@@ -54,29 +54,20 @@
       <!--Copyright &copy; 2021 All Rights Reserved by-->
       <div>
         Designed and developed by
-        <a href="https://github.com/s-a-tanjim" target="_blank">s-a-tanjim</a>.
+        <a :href="profile.socials.github" target="_blank">{{ profile.username }}</a>.
       </div>
       Updated on 2024
     </div>
   </footer>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      email: '',
-    }
-  },
-  mounted() {
-    const z = '.com'
-    const d = 'tanjim'
-    const x = 'gmail'
-    const b = 'shoeb'
-    const a = 'mailto:'
-    this.email = a + b + d + '@' + x + z
-  },
-}
+<script setup>
+import { profile } from '~/data/profile'
+
+const email = ref('')
+onMounted(() => {
+  email.value = `mailto:${'shoeb'}${'tanjim'}@${'gmail'}.com`
+})
 </script>
 
 <style scoped>

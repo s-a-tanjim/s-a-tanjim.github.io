@@ -12,11 +12,13 @@
 </template>
 
 <script setup>
+import { profile } from '~/data/profile'
+
 useHead({
-  title: 'Resume | s-a-tanjim',
+  title: `Resume | ${profile.username}`,
   meta: [{
     name: 'description',
-    content: 'Resume | s-a-tanjim | Personal Website'  
+    content: `Resume | ${profile.username} | Personal Website`
   }]
 })
 </script>
