@@ -1,58 +1,12 @@
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
+/* Nuxt app root must fill viewport */
+#__nuxt {
+  height: 100%;
 }
 
-body {
-  font-family: var(--font-family);
-  background-color: var(--bg-primary);
-  color: var(--color-primary);
+.show {
+  display: initial !important;
 }
 
-a {
-  text-decoration: none;
-  font-weight: bold;
-  color: var(--color-primary);
-
-  &:hover {
-    color: var(--color-hover) !important;
-  }
-  &:focus {
-    outline: none;
-  }
-}
-
-.btn {
-  &:focus {
-    outline: none !important;
-    box-shadow: none !important;
-    &:active {
-      outline: none !important;
-      box-shadow: none !important;
-    }
-  }
-  &:active {
-    outline: none !important;
-    box-shadow: none !important;
-    &:focus {
-      outline: none !important;
-      box-shadow: none !important;
-    }
-  }
-}
-
-.dashed-hr {
-  padding: 0px;
-  margin: 0px;
-  border: 2px dashed var(--color-primary);
-  color: var(--bg-primary);
-  opacity: 0.9;
-}
-
-.icon-40 {
-  height: 40px;
-  width: 40px;
-  cursor: pointer;
+.hide {
+  display: none !important;
 }

@@ -9,11 +9,13 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
+  "dependencies": {
+    "bootstrap": "^5.3.8"
+  },
   "devDependencies": {
-    "@nuxtjs/color-mode": "^3.2.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-prettier": "^3.3.1",
-    "nuxt": "^3.13.2",
+    "nuxt": "^4.4.6",
     "prettier": "^2.2.1",
     "sass": "^1.37.5",
     "sass-loader": "^10"

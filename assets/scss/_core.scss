@@ -1,47 +1,72 @@
-/* Text Select */
-::-moz-selection {
-  /* Firefox */
-  color: #fff;
-  background: #585c5c;
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+  line-height: 1.4;
+  overflow: hidden;
+
+  /* XP desktop wallpaper */
+  background:
+    url('/img/xp-wallpaper.jpg') center center / cover no-repeat fixed,
+    #4F8FDF;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* XP-style raised 3D scrollbar */
+::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+  background: #D4D0C8;
+}
+::-webkit-scrollbar-track {
+  background:
+    repeating-linear-gradient(
+      45deg,
+      #EEE9D5 0 2px,
+      #D4D0C8 2px 4px
+    );
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #F5F4EA 0%, #ECE9D8 50%, #D4D0C8 100%);
+  border: 1px solid #716F64;
+  box-shadow:
+    inset 1px 1px 0 #FFFFFF,
+    inset -1px -1px 0 #ACA899;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #FFFFFF 0%, #F0EDDD 50%, #D8D4C2 100%);
+}
+::-webkit-scrollbar-button {
+  background: linear-gradient(180deg, #F5F4EA 0%, #ECE9D8 100%);
+  border: 1px solid #716F64;
+  box-shadow:
+    inset 1px 1px 0 #FFFFFF,
+    inset -1px -1px 0 #ACA899;
+  display: block;
+  height: 16px;
+  width: 16px;
+}
+:root {
+  scrollbar-color: #ECE9D8 #D4D0C8;
 }
 
 ::selection {
+  background: var(--xp-selection);
   color: #fff;
-  background: #585c5c;
-}
-
-.show {
-  display: initial !important;
-}
-
-.hide {
-  display: none !important;
-}
-
-/* Scroll Bar Design */
-::-webkit-scrollbar {
-  width: 8px;
-  background-color: #f5f5f5;
-}
-
-::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
-  background-color: #f5f5f5;
-}
-
-::-webkit-scrollbar-thumb {
-  border-radius: 8px;
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  background-color: rgb(46, 54, 69);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
-  cursor: pointer;
-}
-
-:root {
-  scrollbar-color: rgb(210, 210, 210) rgb(46, 54, 69) !important;
-  scrollbar-width: thin !important;
 }

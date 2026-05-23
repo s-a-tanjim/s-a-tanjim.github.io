@@ -68,11 +68,13 @@
 </template>
 
 <script setup>
+import { profile } from '~/data/profile'
+
 useHead({
-  title: 'Works | s-a-tanjim',
+  title: `Works | ${profile.username}`,
   meta: [{
     name: 'description',
-    content: 'Works | s-a-tanjim | Personal Website'  
+    content: `Works | ${profile.username} | Personal Website`
   }]
 })
 </script>

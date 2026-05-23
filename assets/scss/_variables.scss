@@ -1,38 +1,96 @@
 :root {
-  --font-family: 'Space Mono', Roboto, sans-serif;
-  --border-radius: 5px;
-}
+  /* ── Fonts ─────────────────────────────────────────
+     Tahoma is the XP system font; Trebuchet MS is the
+     classic bold titlebar font. */
+  --font-family: 'Tahoma', 'Geneva', 'Verdana', sans-serif;
+  --font-family-title: 'Trebuchet MS', 'Tahoma', sans-serif;
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-base: 13px;
+  --font-size-md: 14px;
 
-.dark-mode {
-  --bg-primary: #2c2f33;
-  --bg-secondary: #343a40;
+  /* ── Layout ──────────────────────────────────────── */
+  --titlebar-h: 28px;
+  --menubar-h: 22px;
+  --addressbar-h: 32px;
+  --taskbar-h: 30px;
+  --statusbar-h: 22px;
+  --sidebar-w: 230px;
 
-  --bg-dotted-1: rgba(51, 85, 255, 0.3);
-  --bg-dotted-2: rgba(136, 153, 255, 0.4);
+  /* ── Windows XP "Luna" palette ─────────────────────
+     Window chrome (the iconic beige-gray) */
+  --xp-window: #ECE9D8;
+  --xp-window-alt: #F1EFE2;
+  --xp-window-edge: #0831D9;        /* deep blue window border */
+  --xp-window-edge-soft: #0050EE;
 
-  --color-primary: #ffffff;
-  --color-secondary: #737373;
-  --color-tertiary: #737373;
+  /* Title bar gradient stops (top → bottom) */
+  --xp-title-1: #0058E6;
+  --xp-title-2: #3F8CF3;
+  --xp-title-3: #4FA3FF;
+  --xp-title-4: #2A7CEE;
+  --xp-title-5: #0058E6;
 
-  --color-hover: #637caf;
-  --footer-bg: #26272b;
-  --footer-txt: #737373;
-  --color-border: #6a71c5;
-}
+  /* Inactive title bar */
+  --xp-title-inactive-1: #7A96DF;
+  --xp-title-inactive-2: #B9D1EA;
 
-.light-mode {
-  --bg-primary: #d8e5ff;
-  --bg-secondary: #737373;
+  /* Taskbar gradient */
+  --xp-taskbar-1: #245EDB;
+  --xp-taskbar-2: #3A81F3;
+  --xp-taskbar-3: #245EDB;
 
-  --bg-dotted-1: rgba(51, 85, 255, 0.3);
-  --bg-dotted-2: rgba(40, 45, 66, 0.63);
+  /* Start button (green) */
+  --xp-start-1: #5EAC56;
+  --xp-start-2: #3C873A;
+  --xp-start-3: #2E6F2D;
 
-  --color-primary: #2c2f33;
-  --color-secondary: #343a40;
-  --color-tertiary: #8a8a8a;
+  /* Task pane (Explorer left rail) */
+  --xp-rail-1: #7BA2E8;
+  --xp-rail-2: #4D6FCD;
+  --xp-pane-header-1: #C1D2EE;
+  --xp-pane-header-2: #7DA2CE;
+  --xp-pane-body-1: #D6DFF7;
+  --xp-pane-body-2: #B7C8E5;
 
-  --color-hover: #3366cc;
-  --footer-bg: #26272b;
-  --footer-txt: #8a8a8a;
-  --color-border: #6a71c5;
+  /* Buttons (3D bevel) */
+  --xp-btn-face: #ECE9D8;
+  --xp-btn-light: #FFFFFF;
+  --xp-btn-shadow: #ACA899;
+  --xp-btn-dark: #716F64;
+
+  /* Text */
+  --text-primary: #000000;
+  --text-secondary: #3B3B3B;
+  --text-muted: #6E6E6E;
+  --text-white: #FFFFFF;
+  --text-link: #0033CC;
+
+  /* Misc */
+  --xp-selection: #316AC5;
+  --xp-divider: #ACA899;
+
+  /* ── Legacy aliases (so old class names still resolve) ── */
+  --bg-editor: var(--xp-window);
+  --bg-sidebar: var(--xp-pane-body-1);
+  --bg-titlebar: var(--xp-title-1);
+  --bg-hover: #D8E4F8;
+  --bg-active: #C8D8F0;
+  --bg-tabbar: var(--xp-window-alt);
+  --bg-tab-active: var(--xp-window);
+  --bg-statusbar: var(--xp-window);
+  --border: var(--xp-divider);
+
+  --accent: var(--xp-title-1);
+  --accent-blue: #0033CC;
+  --accent-teal: #006666;
+  --accent-yellow: #806000;
+  --accent-green: #006400;
+  --accent-orange: #8B4500;
+
+  --dot-red: #E04A3E;
+  --dot-yellow: #FFC83D;
+  --dot-green: #5EAC56;
+
+  --vue-color: var(--xp-title-1);
 }
