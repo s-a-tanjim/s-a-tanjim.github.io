@@ -217,7 +217,8 @@
             <div class="sm-item disabled"><span class="sm-bullet">📂</span><span>My Documents</span></div>
             <div
               class="sm-item"
-              title="Double-click to open"
+              :title="isTouchDevice ? 'Tap to open' : 'Double-click to open'"
+              @click.stop="onPicturesClick"
               @dblclick.stop="openPictures"
             ><span class="sm-bullet">🖼️</span><span>My Pictures</span></div>
             <NuxtLink to="/games/pacman" class="sm-item" @click="startOpen = false">
@@ -225,7 +226,9 @@
             </NuxtLink>
             <div class="sm-sep"></div>
             <div class="sm-item disabled"><span class="sm-bullet">⚙️</span><span>Control Panel</span></div>
-            <div class="sm-item disabled"><span class="sm-bullet">❓</span><span>Help and Support</span></div>
+            <NuxtLink to="/contact" class="sm-item" @click="startOpen = false">
+              <span class="sm-bullet">❓</span><span>Help and Support</span>
+            </NuxtLink>
           </div>
         </div>
         <div class="sm-footer">
@@ -251,6 +254,7 @@ const sidebarOpen = ref(false)
 const startOpen = ref(false)
 const clock = ref('')
 const selectedIcon = ref(null)
+const isTouchDevice = ref(false)
 
 const workspaceRef = ref(null)
 
@@ -276,6 +280,7 @@ function startIconDrag(id, e) {
     mouseX: point.clientX,
     mouseY: point.clientY,
     moved: false,
+    isTouch: !!e.touches,
   }
   selectedIcon.value = id
   window.addEventListener('mousemove', onIconDrag)
@@ -303,6 +308,10 @@ function onIconDrag(e) {
 }
 
 function endIconDrag() {
+  /* On touch devices, a tap without drag opens the icon — dblclick
+     is unreliable on phones, so the first tap acts as "open". */
+  const tap = !!(iconDrag && iconDrag.isTouch && !iconDrag.moved)
+  const tappedId = iconDrag?.id
   if (iconDrag?.moved) {
     try { localStorage.setItem(ICON_STORAGE_KEY, JSON.stringify(iconPositions)) } catch {}
   }
@@ -312,6 +321,10 @@ function endIconDrag() {
   window.removeEventListener('touchmove', onIconDrag)
   window.removeEventListener('touchend', endIconDrag)
   window.removeEventListener('touchcancel', endIconDrag)
+  if (tap) {
+    if (tappedId === 'portfolio') openPortfolio()
+    else if (tappedId === 'pacman') openPacman()
+  }
 }
 
 function loadIconPositions() {
@@ -432,6 +445,10 @@ function openPictures() {
   pictureViewerOpen.value = true
 }
 
+function onPicturesClick() {
+  if (isTouchDevice.value) openPictures()
+}
+
 let pvDragStart = null
 function startPvDrag(e) {
   if (e.target.closest('.xp-title-buttons')) return
@@ -481,6 +498,16 @@ function fitWindow() {
   }
 }
 
+/* ── Visible viewport height ────────────────────────
+   Pin the desktop to the actual visible area. On mobile, dvh isn't
+   always accurate (older browsers, in-app webviews, address-bar
+   transitions), so window.innerHeight / visualViewport.height wins. */
+function updateAppHeight() {
+  if (typeof window === 'undefined') return
+  const h = window.visualViewport?.height ?? window.innerHeight
+  document.documentElement.style.setProperty('--app-height', `${h}px`)
+}
+
 /* ── Address bar / status text ──────────────────── */
 const currentFile = computed(() => {
   const p = route.path
@@ -511,14 +538,22 @@ function updateClock() {
 onMounted(() => {
   updateClock()
   clockTimer = setInterval(updateClock, 30000)
+  updateAppHeight()
   fitWindow()
   loadIconPositions()
+  isTouchDevice.value = window.matchMedia('(pointer: coarse)').matches
   window.addEventListener('resize', fitWindow)
+  window.addEventListener('resize', updateAppHeight)
+  window.addEventListener('orientationchange', updateAppHeight)
+  window.visualViewport?.addEventListener('resize', updateAppHeight)
 })
 
 onBeforeUnmount(() => {
   clearInterval(clockTimer)
   window.removeEventListener('resize', fitWindow)
+  window.removeEventListener('resize', updateAppHeight)
+  window.removeEventListener('orientationchange', updateAppHeight)
+  window.visualViewport?.removeEventListener('resize', updateAppHeight)
   endDrag()
   endIconDrag()
 })
@@ -533,11 +568,17 @@ watch(() => route.path, () => {
 <style scoped>
 /* ── Desktop ─────────────────────────────────────── */
 .xp-desktop {
+  /* --app-height is set from JS (window.innerHeight) so the layout
+     always matches the visual viewport, even when the mobile browser's
+     URL bar collapses or the on-screen keyboard appears. dvh / vh are
+     fallbacks for the first paint before JS runs. */
   height: 100vh;
+  height: 100dvh;
+  height: var(--app-height, 100dvh);
   width: 100vw;
   overflow: hidden;
   display: grid;
-  grid-template-rows: 1fr var(--taskbar-h);
+  grid-template-rows: 1fr calc(var(--taskbar-h) + env(safe-area-inset-bottom, 0px));
   font-family: var(--font-family);
 }
 
@@ -943,7 +984,8 @@ watch(() => route.path, () => {
 .xp-taskbar {
   display: flex;
   align-items: stretch;
-  height: var(--taskbar-h);
+  height: calc(var(--taskbar-h) + env(safe-area-inset-bottom, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
   background:
     linear-gradient(180deg,
       #1F3FA5 0%,
@@ -1077,7 +1119,7 @@ watch(() => route.path, () => {
 .sm-panel {
   position: absolute;
   left: 0;
-  bottom: var(--taskbar-h);
+  bottom: calc(var(--taskbar-h) + env(safe-area-inset-bottom, 0px));
   width: 380px;
   max-width: 95vw;
   background: var(--xp-window);
@@ -1231,22 +1273,56 @@ watch(() => route.path, () => {
 
 /* ── Mobile ──────────────────────────────────────── */
 @media (max-width: 900px) {
+  /* Anchor the taskbar to the visual-viewport bottom on mobile. Grid
+     placement alone can fail on phones because the workspace's 1fr row
+     resolves against the layout viewport, leaving the taskbar below
+     the visible area when the URL bar is showing. */
+  .xp-desktop {
+    grid-template-rows: 1fr 0;
+  }
+  .xp-taskbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 90;
+  }
   .xp-window {
     /* Forced full-bleed on small screens (also locked by JS) */
     left: 0 !important;
     top: 0 !important;
     width: 100% !important;
-    height: 100% !important;
+    height: calc(100% - var(--taskbar-h) - env(safe-area-inset-bottom, 0px)) !important;
     border-radius: 0;
     box-shadow: none;
+    /* Drop the menubar + in-window statusbar rows on mobile. */
+    grid-template-rows:
+      var(--titlebar-h) auto var(--addressbar-h) 1fr;
   }
   .xp-titlebar { cursor: default; border-radius: 0; }
+  .xp-menubar { display: none; }
+  .xp-statusbar { display: none; }
   .xp-toolbar .tb-label { display: none; }
+  .xp-toolbar { padding: 4px 6px; gap: 2px; }
+  .tb-btn { padding: 6px 10px; height: 32px; }
+
+  /* Address bar: drop the "Address" label and "Go" button — keep just the path */
+  .xp-addressbar { padding: 3px 6px; gap: 6px; }
+  .addr-label, .addr-go { display: none; }
+  .addr-input { height: 26px; }
+
+  /* Bigger window control buttons — easier to tap. */
+  .xp-tbtn {
+    width: 28px;
+    height: 24px;
+  }
+
   .xp-sidebar {
     position: absolute;
     top: 0;
     left: 0;
     height: 100%;
+    width: min(86vw, 280px);
     z-index: 50;
     transform: translateX(-100%);
   }
@@ -1261,7 +1337,22 @@ watch(() => route.path, () => {
     z-index: 40;
     background: rgba(0, 0, 0, 0.3);
   }
+
+  /* Taskbar: keep start button + tray visible, let tasks shrink. */
   .xp-task .task-label { display: none; }
+  .xp-task { max-width: 44px; padding: 0 6px; }
+  .xp-start { padding: 0 14px 0 6px; font-size: 15px; }
+  .xp-tray { padding: 0 6px; gap: 4px; }
+  .tray-icon { font-size: 11px; }
+  .tray-clock { min-width: 0; padding-left: 2px; font-size: var(--font-size-xs); }
+
   .sm-panel { width: 92vw; }
+}
+
+/* ── Very small phones (<= 480px) ──────────────────── */
+@media (max-width: 480px) {
+  .xp-tasks { padding: 3px 2px; }
+  .xp-icon { width: 64px; }
+  .xp-icon-glyph, .xp-icon-glyph img { width: 32px; height: 32px; }
 }
 </style>
