@@ -1,21 +1,20 @@
 <template>
   <div>
-    <section class="container mt-5">
-      <div class="text-center">
+    <section class="container achievements">
+      <div class="page-title">
         <h1>Some of my achievements</h1>
       </div>
 
-      <div class="row justify-content-center mt-3">
+      <div class="cards-grid">
         <div
           v-for="(data, index) in projects"
           v-bind:key="index"
-          class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mt-4"
         >
           <div class="card-container">
             <div class="img-container">
               <img :src="data.img_src" class="card-img" :alt="data.title" />
             </div>
-            <div class="text-container p-3" style="color: #111">
+            <div class="text-container" style="color: #111">
               <h5 style="font-weight: bold">{{ data.title }}</h5>
               <div>
                 {{ data.description }}
@@ -102,6 +101,31 @@ export default {
 </script>
 
 <style scoped>
+.achievements {
+  margin-top: 3rem;
+}
+.page-title {
+  text-align: center;
+}
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+@media (min-width: 768px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 992px) {
+  .cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.text-container {
+  padding: 1rem;
+}
 .card-container {
   height: 100%;
   background-color: #f5f5f5;

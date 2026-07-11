@@ -9,12 +9,9 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
-  "dependencies": {
-    "bootstrap": "^5.3.8"
-  },
   "devDependencies": {
-    "nuxt": "^4.4.6",
-    "prettier": "^3.8.3",
-    "sass": "^1.100.0"
+    "nuxt": "^4.4.8",
+    "prettier": "^3.9.5",
+    "sass": "^1.101.0"
   }
 }

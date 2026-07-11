@@ -1,8 +1,8 @@
 <template>
   <div>
-    <section class="container mt-5">
+    <section class="container works">
       <div>
-        <div style="text-align: center" class="my-5">
+        <div class="section-title">
           <h1>Some of my publications</h1>
         </div>
         <div
@@ -24,7 +24,7 @@
         </div>
       </div>
       <div>
-        <div style="text-align: center" class="my-5">
+        <div class="section-title">
           <h1>Some of my works</h1>
         </div>
 
@@ -36,15 +36,15 @@
           <div class="img-container">
             <img :src="data.img_src" class="card-img" :alt="data.title" />
           </div>
-          <div class="info-container p-3" style="color: #111">
+          <div class="info-container" style="color: #111">
             <div>
               <h5 style="font-weight: bold">{{ data.title }}</h5>
 
               {{ data.description }}
             </div>
-            <div style="text-align: right; font-weight: bold" class="mt-2">
+            <div class="tech-stack" style="text-align: right; font-weight: bold">
               {{ data.tech_stack }}
-              <div class="icon-container mt-2">
+              <div class="icon-container">
                 <a
                   v-if="data.github_link"
                   :href="data.github_link"
@@ -219,6 +219,13 @@ export default {
 </script>
 
 <style scoped>
+.works {
+  margin-top: 3rem;
+}
+.section-title {
+  text-align: center;
+  margin: 3rem 0;
+}
 .research-container {
   margin: 20px 0px;
   padding: 20px 20px;
@@ -264,6 +271,13 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  padding: 1rem;
+}
+.tech-stack {
+  margin-top: 0.5rem;
+}
+.icon-container {
+  margin-top: 0.5rem;
 }
 .icon-container img {
   width: 35px;
