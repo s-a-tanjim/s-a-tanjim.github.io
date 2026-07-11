@@ -18,3 +18,158 @@
 .hide {
   display: none !important;
 }
+
+/* ── XP push buttons ───────────────────────────────
+   Matches XP.css: white→beige vertical gradient, a single #003c74
+   border, no bevel shadow at rest, a pressed gradient on :active, and
+   the blue "default button" glow on focus / .primary. Defined once here
+   so every page shares the exact same look. */
+.xp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 96px;
+  padding: 5px 14px;
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  color: #000;
+  cursor: pointer;
+  text-decoration: none;
+  border: 1px solid #003c74;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #fff, #ecebe5 86%, #d8d0c4);
+  box-shadow: none;
+}
+.xp-btn:active,
+.xp-btn.active {
+  background: linear-gradient(180deg, #cdcac3, #e3e3db 8%, #e5e5de 94%, #f2f2f1);
+  box-shadow: none;
+}
+.xp-btn:focus-visible {
+  outline: none;
+  box-shadow:
+    inset -1px 1px #cee7ff, inset 1px 2px #98b8ea, inset -2px 2px #bcd4f6,
+    inset 1px -1px #89ade4, inset 2px -2px #89ade4;
+}
+.xp-btn.primary {
+  /* XP flags the default action with the same focus glow. */
+  box-shadow:
+    inset -1px 1px #cee7ff, inset 1px 2px #98b8ea, inset -2px 2px #bcd4f6,
+    inset 1px -1px #89ade4, inset 2px -2px #89ade4;
+}
+.xp-btn:disabled {
+  color: #808080;
+  cursor: default;
+}
+
+/* Inline / button icons (CSS-only glyphs used next to .xp-btn labels). */
+.btn-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+.btn-icon.user {
+  background:
+    radial-gradient(circle at 50% 30%, #FFD8A8 28%, transparent 30%),
+    linear-gradient(180deg, #3F8CF3 60%, #1A4BAE 100%);
+  border-radius: 2px;
+}
+.btn-icon.link {
+  background: linear-gradient(180deg, #FFE99C 0%, #FFC83D 100%);
+  clip-path: polygon(0 25%, 38% 25%, 45% 15%, 100% 15%, 100% 95%, 0 95%);
+}
+.btn-icon.mail {
+  background: linear-gradient(180deg, #F8F8F8 0%, #C8C8C8 100%);
+  border: 1px solid #555;
+  position: relative;
+}
+.btn-icon.pacman {
+  border-radius: 50%;
+  background:
+    conic-gradient(from -30deg, transparent 0deg 60deg, #FFEC2A 60deg 360deg);
+}
+
+/* A wrapping row of action buttons. */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ── Page building blocks ──────────────────────────
+   Shared by the content pages (Home, About, Contact, Pac-Man). Kept
+   here so the banner, group box, and text primitives stay identical
+   across pages instead of being copy-pasted into each one. */
+
+/* Title strip at the top of a page. */
+.page-banner {
+  padding: 14px 24px;
+  background: linear-gradient(90deg, #FFFFFF 0%, #D6DFF7 60%, #7BA2E8 100%);
+  border-bottom: 1px solid #4D6FCD;
+  color: #0F2C70;
+}
+.banner-title {
+  font-family: var(--font-family-title);
+  font-size: 22px;
+  font-weight: bold;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.6);
+}
+.banner-sub {
+  font-size: var(--font-size-sm);
+  color: #36497B;
+  margin-top: 2px;
+}
+
+/* XP group box (a <fieldset> with a <legend>). */
+.xp-group {
+  border: 1px solid #919B9C;
+  border-radius: 3px;
+  padding: 12px 16px 14px;
+  background: var(--xp-window);
+  box-shadow:
+    inset 1px 1px 0 #FFFFFF,
+    inset -1px -1px 0 #E2DECC;
+}
+.xp-group legend {
+  padding: 0 6px;
+  font-weight: bold;
+  color: #0033CC;
+  font-size: var(--font-size-sm);
+}
+
+/* Key/value grid (About, Contact). */
+.kv-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 18px;
+  font-size: var(--font-size-sm);
+}
+.kv-cell {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 8px;
+  align-items: baseline;
+  padding: 2px 0;
+}
+.kv-cell.wide { grid-column: 1 / -1; }
+.k { color: #4A4A4A; text-align: right; }
+.v { color: #000; font-weight: bold; }
+
+/* Body copy paragraphs. */
+.prose {
+  font-size: var(--font-size-base);
+  color: #000;
+  line-height: 1.55;
+  margin-bottom: 6px;
+}
+.prose:last-child { margin-bottom: 0; }
+
+@media (max-width: 600px) {
+  .page-banner { padding: 12px 16px; }
+  .banner-title { font-size: 18px; }
+  .kv-grid { grid-template-columns: 1fr; gap: 4px 0; }
+  .kv-cell { grid-template-columns: 90px 1fr; }
+}

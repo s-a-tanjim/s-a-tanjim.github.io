@@ -1,0 +1,36 @@
+/* ── Pixelated retro cursors ───────────────────────
+   Classic Windows-style arrow + link-select hand, drawn as small
+   pixel-art PNGs (see public/cursors/). The universal `inherit`
+   neutralises the many per-component `cursor:` declarations so the
+   whole XP desktop pixelates consistently; clickable elements then
+   opt back into the pointing hand. */
+html {
+  cursor: url('/cursors/arrow.png') 0 0, default !important;
+}
+*, *::before, *::after {
+  cursor: inherit !important;
+}
+
+a[href],
+button:not(:disabled),
+[role="button"],
+summary,
+label[for],
+.xp-btn:not(:disabled),
+.xp-icon,
+.xp-task,
+.xp-start,
+.xp-tbtn,
+.sm-item:not(.disabled),
+.sm-foot-btn,
+.pane-link:not(.disabled),
+.pane-header,
+.pane-toggle,
+.tb-btn:not(:disabled),
+.addr-go,
+.tray-icon,
+.card-img,
+.img-container,
+.research-container a {
+  cursor: url('/cursors/hand.png') 7 0, pointer !important;
+}

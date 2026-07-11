@@ -22,10 +22,10 @@
             <span class="pane-icon user"></span>
             <span class="pane-text">About me</span>
           </NuxtLink>
-          <NuxtLink to="/games/pacman" class="pane-link" active-class="active" @click="$emit('navigate')">
+          <a class="pane-link" role="button" tabindex="0" @click="openPacman">
             <span class="pane-icon games"></span>
             <span class="pane-text">Pac-Man</span>
-          </NuxtLink>
+          </a>
         </div>
       </div>
     </section>
@@ -87,7 +87,8 @@
 <script setup>
 import { profile, shortLocation } from '~/data/profile'
 
-defineEmits(['navigate'])
+const emit = defineEmits(['navigate'])
+const wm = useWindows()
 
 const open = reactive({
   systemTasks: true,
@@ -97,6 +98,11 @@ const open = reactive({
 
 function toggle(key) {
   open[key] = !open[key]
+}
+
+function openPacman() {
+  wm.open('pacman')
+  emit('navigate')
 }
 </script>
 

@@ -6,7 +6,7 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/eacd4b7e-3b48-417b-9aba-649dfd743de4/deploy-status)](https://app.netlify.com/sites/s-a-tanjim/deploys)
 </center>
 
-![Thumbnail](https://s-a-tanjim.netlify.app/site-thumbnail.jpg)
+![Thumbnail](https://s-a-tanjim.netlify.app/site-thumbnail.png)
 
 # Installation Process
 Please follow the instructions in commands.md

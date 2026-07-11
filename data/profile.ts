@@ -18,7 +18,7 @@ export const profile = {
   },
   site: {
     url: 'https://s-a-tanjim.netlify.app',
-    thumbnail: 'https://s-a-tanjim.netlify.app/site-thumbnail.jpg',
+    thumbnail: 'https://s-a-tanjim.netlify.app/site-thumbnail.png',
   },
 } as const
 

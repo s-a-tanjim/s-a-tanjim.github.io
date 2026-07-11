@@ -31,6 +31,12 @@
   --xp-title-4: #2A7CEE;
   --xp-title-5: #0058E6;
 
+  /* Exact XP.css Luna title-bar gradient — shared by the window title
+     bar and the Start-menu header so the two stay identical. */
+  --xp-luna-titlebar: linear-gradient(180deg,
+    #0997ff 0%, #0053ee 8%, #0050ee 40%, #0060ff 88%,
+    #0060ff 93%, #005bff 95%, #003dd7 96%, #003dd7 100%);
+
   /* Inactive title bar */
   --xp-title-inactive-1: #7A96DF;
   --xp-title-inactive-2: #B9D1EA;

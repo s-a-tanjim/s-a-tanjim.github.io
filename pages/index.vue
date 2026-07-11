@@ -35,10 +35,10 @@
           <span class="btn-icon user"></span>
           <span>About me</span>
         </NuxtLink>
-        <NuxtLink to="/games/pacman" class="xp-btn">
+        <button type="button" class="xp-btn" @click="openPacman">
           <span class="btn-icon pacman"></span>
           <span>Play Pac-Man</span>
-        </NuxtLink>
+        </button>
         <a :href="profile.socials.github" target="_blank" rel="noopener" class="xp-btn">
           <span class="btn-icon link"></span>
           <span>GitHub</span>
@@ -65,6 +65,9 @@ import { profile, fullLocation } from '~/data/profile'
 useHead({
   title: `Home | ${profile.username}`,
 })
+
+const wm = useWindows()
+function openPacman() { wm.open('pacman') }
 </script>
 
 <style scoped>
@@ -74,31 +77,6 @@ useHead({
   min-height: 100%;
 }
 
-/* ── Banner ──────────────────────────────────────── */
-.page-banner {
-  padding: 14px 24px;
-  background:
-    linear-gradient(90deg,
-      #FFFFFF 0%,
-      #D6DFF7 60%,
-      #7BA2E8 100%);
-  border-bottom: 1px solid #4D6FCD;
-  color: #0F2C70;
-}
-.banner-title {
-  font-family: var(--font-family-title);
-  font-size: 22px;
-  font-weight: bold;
-  letter-spacing: 0.01em;
-  line-height: 1.2;
-  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.6);
-}
-.banner-sub {
-  font-size: var(--font-size-sm);
-  color: #36497B;
-  margin-top: 2px;
-}
-
 /* ── Content ─────────────────────────────────────── */
 .home-content {
   padding: 18px 24px 28px;
@@ -106,23 +84,6 @@ useHead({
   flex-direction: column;
   gap: 16px;
   max-width: 760px;
-}
-
-/* ── XP-style group box (fieldset with legend) ───── */
-.xp-group {
-  border: 1px solid #919B9C;
-  border-radius: 3px;
-  padding: 12px 16px 14px;
-  background: var(--xp-window);
-  box-shadow:
-    inset 1px 1px 0 #FFFFFF,
-    inset -1px -1px 0 #E2DECC;
-}
-.xp-group legend {
-  padding: 0 6px;
-  font-weight: bold;
-  color: #0033CC;
-  font-size: var(--font-size-sm);
 }
 
 /* ── Profile row ─────────────────────────────────── */
@@ -175,69 +136,6 @@ useHead({
   box-shadow: 0 0 4px rgba(45, 166, 58, 0.7);
 }
 
-/* ── XP buttons ──────────────────────────────────── */
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.xp-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-width: 96px;
-  padding: 5px 14px;
-  font-family: var(--font-family);
-  font-size: var(--font-size-sm);
-  color: #000;
-  cursor: pointer;
-  background: linear-gradient(180deg, #FCFCFC 0%, #F0EDDD 50%, #D4D0C0 100%);
-  border: 1px solid #003C74;
-  border-radius: 3px;
-  box-shadow:
-    inset 1px 1px 0 #FFFFFF,
-    inset -1px -1px 0 #ACA899;
-  text-decoration: none;
-}
-.xp-btn:hover {
-  background: linear-gradient(180deg, #FFFEF1 0%, #FFE9A5 50%, #E5CC75 100%);
-  border-color: #C0985C;
-}
-.xp-btn:active {
-  background: linear-gradient(180deg, #D4D0C0 0%, #F0EDDD 50%, #FCFCFC 100%);
-  box-shadow:
-    inset -1px -1px 0 #FFFFFF,
-    inset 1px 1px 0 #ACA899;
-}
-.xp-btn.primary {
-  font-weight: bold;
-  box-shadow:
-    inset 1px 1px 0 #FFFFFF,
-    inset -1px -1px 0 #ACA899,
-    0 0 0 1px #003C74;
-}
-
-.btn-icon { width: 14px; height: 14px; flex-shrink: 0; }
-.btn-icon.user {
-  background:
-    radial-gradient(circle at 50% 30%, #FFD8A8 28%, transparent 30%),
-    linear-gradient(180deg, #3F8CF3 60%, #1A4BAE 100%);
-  border-radius: 2px;
-}
-.btn-icon.link {
-  background:
-    linear-gradient(180deg, #FFE99C 0%, #FFC83D 100%);
-  clip-path: polygon(0 25%, 38% 25%, 45% 15%, 100% 15%, 100% 95%, 0 95%);
-}
-.btn-icon.pacman {
-  border-radius: 50%;
-  background:
-    conic-gradient(
-      from -30deg,
-      transparent 0deg 60deg,
-      #FFEC2A 60deg 360deg);
-}
-
 /* ── Tip bar ─────────────────────────────────────── */
 .xp-tip {
   display: flex;
@@ -254,8 +152,6 @@ useHead({
 
 /* ── Responsive ──────────────────────────────────── */
 @media (max-width: 600px) {
-  .page-banner { padding: 12px 16px; }
-  .banner-title { font-size: 18px; }
   .home-content { padding: 14px 16px 24px; gap: 12px; }
   .profile-row {
     flex-direction: column;

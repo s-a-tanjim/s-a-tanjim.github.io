@@ -2,7 +2,13 @@
   <div class="xp-desktop">
 
     <!-- ── Workspace (desktop area above the taskbar) ── -->
-    <div class="xp-workspace" ref="workspaceRef" @click.self="selectedIcon = null">
+    <div
+      class="xp-workspace"
+      :class="{ refreshing }"
+      ref="workspaceRef"
+      @click.self="selectedIcon = null"
+      @contextmenu="onWorkspaceCtx"
+    >
 
       <!-- ── Desktop icons (draggable) ───────────────── -->
       <button
@@ -14,6 +20,7 @@
         @touchstart.passive.stop="startIconDrag('portfolio', $event)"
         @click.stop="selectedIcon = 'portfolio'"
         @dblclick="openPortfolio"
+        @contextmenu.prevent.stop="openIconMenu('portfolio', $event)"
       >
         <span class="xp-icon-glyph">
           <img src="/favicon.svg" alt="" draggable="false" onerror="this.style.display='none'" />
@@ -28,7 +35,8 @@
         @mousedown.stop="startIconDrag('pacman', $event)"
         @touchstart.passive.stop="startIconDrag('pacman', $event)"
         @click.stop="selectedIcon = 'pacman'"
-        @dblclick="openPacman"
+        @dblclick="launchPacman"
+        @contextmenu.prevent.stop="openIconMenu('pacman', $event)"
       >
         <span class="xp-icon-glyph pacman-glyph">
           <span class="pacman-glyph-shape"></span>
@@ -40,7 +48,8 @@
       <div
         class="xp-window"
         :class="{ maximized: isMaximized, minimized: isMinimized, dragging: isDragging }"
-        :style="windowStyle"
+        :style="[windowStyle, { zIndex: wm.zOf('portfolio') }]"
+        @mousedown="wm.focus('portfolio')"
       >
 
       <!-- Title bar -->
@@ -55,11 +64,13 @@
           <span>{{ profile.username }} — Portfolio</span>
         </div>
         <div class="xp-title-buttons">
-          <button class="xp-tbtn min" aria-label="Minimize" @click="minimize"><span>_</span></button>
-          <button class="xp-tbtn max" aria-label="Maximize" @click="toggleMaximize">
-            <span>{{ isMaximized ? '❐' : '▢' }}</span>
-          </button>
-          <button class="xp-tbtn close" aria-label="Close" @click="minimize"><span>✕</span></button>
+          <button class="xp-tbtn min" aria-label="Minimize" @click="minimize"></button>
+          <button
+            class="xp-tbtn max"
+            :aria-label="isMaximized ? 'Restore' : 'Maximize'"
+            @click="toggleMaximize"
+          ></button>
+          <button class="xp-tbtn close" aria-label="Close" @click="minimize"></button>
         </div>
       </header>
 
@@ -131,9 +142,16 @@
       </button>
 
       <div class="xp-tasks">
-        <button class="xp-task" :class="{ active: !isMinimized }" @click="restoreWindow">
-          <img src="/favicon.svg" alt="" class="task-icon" onerror="this.style.display='none'" />
-          <span class="task-label">{{ profile.username }} — Portfolio</span>
+        <button
+          v-for="t in tasks"
+          :key="t.id"
+          class="xp-task"
+          :class="{ active: t.focused && !t.minimized }"
+          @click="wm.toggle(t.id)"
+        >
+          <img v-if="t.img" :src="t.img" alt="" class="task-icon" onerror="this.style.display='none'" />
+          <span v-else class="task-emoji">{{ t.icon }}</span>
+          <span class="task-label">{{ t.title }}</span>
         </button>
       </div>
 
@@ -141,43 +159,6 @@
         <span class="tray-icon" title="Volume">🔊</span>
         <span class="tray-icon" title="Network">📶</span>
         <span class="tray-clock">{{ clock }}</span>
-      </div>
-    </div>
-
-    <!-- ── Photo viewer (Windows Picture and Fax Viewer style) ───── -->
-    <div
-      v-if="pictureViewerOpen"
-      class="pv-backdrop"
-      @mousedown.self="pictureViewerOpen = false"
-    >
-      <div
-        class="pv-window"
-        :style="{ left: pvPos.x + 'px', top: pvPos.y + 'px' }"
-        @mousedown.stop
-      >
-        <header
-          class="xp-titlebar pv-titlebar"
-          @mousedown="startPvDrag"
-          @touchstart.passive="startPvDrag"
-        >
-          <div class="xp-title-text">
-            <span class="pv-title-glyph">🖼️</span>
-            <span>about-img.jpg — Windows Picture and Fax Viewer</span>
-          </div>
-          <div class="xp-title-buttons">
-            <button
-              class="xp-tbtn close"
-              aria-label="Close"
-              @click="pictureViewerOpen = false"
-            ><span>✕</span></button>
-          </div>
-        </header>
-        <div class="pv-stage">
-          <img src="/img/me/about-img.jpg" alt="about-img.jpg" draggable="false" />
-        </div>
-        <footer class="pv-statusbar">
-          <span>C:\Portfolio\My Pictures\about-img.jpg</span>
-        </footer>
       </div>
     </div>
 
@@ -202,6 +183,9 @@
             <NuxtLink to="/about" class="sm-item" @click="startOpen = false">
               <span class="sm-bullet">👤</span><span>About me</span>
             </NuxtLink>
+            <div class="sm-item" @click.stop="openCmd">
+              <span class="sm-bullet">⌨️</span><span>Command Prompt</span>
+            </div>
             <div class="sm-sep"></div>
             <a :href="profile.socials.github" target="_blank" rel="noopener" class="sm-item">
               <span class="sm-bullet">🐙</span><span>GitHub</span>
@@ -215,15 +199,12 @@
           </div>
           <div class="sm-col sm-col-right">
             <div class="sm-item disabled"><span class="sm-bullet">📂</span><span>My Documents</span></div>
-            <div
-              class="sm-item"
-              :title="isTouchDevice ? 'Tap to open' : 'Double-click to open'"
-              @click.stop="onPicturesClick"
-              @dblclick.stop="openPictures"
-            ><span class="sm-bullet">🖼️</span><span>My Pictures</span></div>
-            <NuxtLink to="/games/pacman" class="sm-item" @click="startOpen = false">
+            <div class="sm-item" @click.stop="openPhotos">
+              <span class="sm-bullet">🖼️</span><span>My Pictures</span>
+            </div>
+            <div class="sm-item" @click.stop="launchPacman">
               <span class="sm-bullet">🎮</span><span>Pac-Man</span>
-            </NuxtLink>
+            </div>
             <div class="sm-sep"></div>
             <div class="sm-item disabled"><span class="sm-bullet">⚙️</span><span>Control Panel</span></div>
             <NuxtLink to="/contact" class="sm-item" @click="startOpen = false">
@@ -242,21 +223,167 @@
       </div>
     </div>
 
+    <!-- ── Right-click context menu ────────────────── -->
+    <xp-context-menu
+      v-if="ctxMenu"
+      :items="ctxMenu.items"
+      :x="ctxMenu.x"
+      :y="ctxMenu.y"
+      @select="onCtxSelect"
+      @close="ctxMenu = null"
+    />
+
+    <!-- ── App windows (Pac-Man, Command Prompt, …) ── -->
+    <XpWindow
+      v-for="w in appWindows"
+      :key="w.id"
+      :title="w.title"
+      :icon="w.icon"
+      :x="w.x"
+      :y="w.y"
+      :w="w.w"
+      :h="w.h"
+      :z="wm.zOf(w.id)"
+      :minimized="wm.isMinimized(w.id)"
+      :focused="wm.focusedId.value === w.id"
+      :maximizable="w.maximizable"
+      @focus="wm.focus(w.id)"
+      @minimize="wm.minimize(w.id)"
+      @close="wm.close(w.id)"
+      @move="(x, y) => wm.setPos(w.id, x, y)"
+    >
+      <component
+        :is="APP_COMPONENTS[w.app]"
+        :win-id="w.id"
+        :focused="wm.focusedId.value === w.id"
+      />
+    </XpWindow>
+
+    <!-- ── Boot + Welcome screen (first load) ──────── -->
+    <xp-boot v-if="booting" @done="finishBoot" />
+
   </div>
 </template>
 
 <script setup>
+import { markRaw } from 'vue'
 import { profile } from '~/data/profile'
+import PacmanApp from '~/components/apps/PacmanApp.vue'
+import CmdApp from '~/components/apps/CmdApp.vue'
+import PhotoApp from '~/components/apps/PhotoApp.vue'
 
 const route = useRoute()
 const router = useRouter()
+
+/* ── Window manager ──────────────────────────────────
+   All windows (the pinned Portfolio explorer + every app window)
+   share one z-order, focus model and taskbar. To add a tool: create a
+   components/apps/*.vue, register it in composables/useWindows.js, and
+   map its key → component here. */
+const wm = useWindows()
+const APP_COMPONENTS = {
+  pacman: markRaw(PacmanApp),
+  cmd: markRaw(CmdApp),
+  photos: markRaw(PhotoApp),
+}
+wm.registerPortfolio({ title: `${profile.username} — Portfolio`, img: '/favicon.svg' })
+
+const appWindows = wm.apps          /* reactive array of open app windows */
+const tasks = wm.tasks              /* taskbar buttons (computed) */
+
+const isMinimized = computed(() => wm.isMinimized('portfolio'))
+
 const sidebarOpen = ref(false)
 const startOpen = ref(false)
 const clock = ref('')
 const selectedIcon = ref(null)
-const isTouchDevice = ref(false)
 
 const workspaceRef = ref(null)
+
+/* ── Boot + Welcome screen (once per browser session) ── */
+const booting = ref(true)
+function finishBoot() {
+  booting.value = false
+  try { sessionStorage.setItem('xp-booted', '1') } catch {}
+}
+
+/* ── Right-click context menus ───────────────────── */
+const ctxMenu = ref(null)
+const refreshing = ref(false)
+
+function onWorkspaceCtx(e) {
+  /* Only the desktop background gets the XP menu; inside a window we
+     leave the native menu so text stays selectable/copyable. */
+  if (e.target.closest('.xp-window')) return
+  e.preventDefault()
+  selectedIcon.value = null
+  ctxMenu.value = { x: e.clientX, y: e.clientY, items: desktopMenuItems() }
+}
+function openIconMenu(id, e) {
+  selectedIcon.value = id
+  ctxMenu.value = { x: e.clientX, y: e.clientY, items: iconMenuItems(id) }
+}
+function desktopMenuItems() {
+  return [
+    { label: 'Arrange Icons By', icon: '▦', children: [
+      { label: 'Name', action: 'arrange' },
+      { label: 'Auto Arrange', action: 'arrange' },
+    ] },
+    { label: 'Refresh', icon: '⟳', action: 'refresh' },
+    { separator: true },
+    { label: 'Paste', disabled: true },
+    { label: 'Paste Shortcut', disabled: true },
+    { separator: true },
+    { label: 'Open Command Prompt', icon: '⌨️', action: 'cmd' },
+    { label: 'New', disabled: true },
+    { separator: true },
+    { label: 'Properties', disabled: true },
+  ]
+}
+function iconMenuItems(id) {
+  return [
+    { label: 'Open', bold: true, action: id === 'pacman' ? 'open-pacman' : 'open-portfolio' },
+    { separator: true },
+    { label: 'Cut', disabled: true },
+    { label: 'Copy', disabled: true },
+    { separator: true },
+    { label: 'Delete', disabled: true },
+    { label: 'Rename', disabled: true },
+    { separator: true },
+    { label: 'Properties', disabled: true },
+  ]
+}
+function onCtxSelect(action) {
+  switch (action) {
+    case 'refresh': doRefresh(); break
+    case 'arrange': arrangeIcons(); break
+    case 'cmd': openCmd(); break
+    case 'open-portfolio': openPortfolio(); break
+    case 'open-pacman': launchPacman(); break
+  }
+}
+function doRefresh() {
+  refreshing.value = true
+  setTimeout(() => { refreshing.value = false }, 180)
+}
+function arrangeIcons() {
+  iconPositions.portfolio = { x: 12, y: 12 }
+  iconPositions.pacman = { x: 12, y: 100 }
+  try { localStorage.setItem(ICON_STORAGE_KEY, JSON.stringify(iconPositions)) } catch {}
+}
+
+/* ── App launchers ───────────────────────────────── */
+function openCmd() {
+  startOpen.value = false
+  ctxMenu.value = null
+  wm.open('cmd')
+}
+function launchPacman() {
+  startOpen.value = false
+  ctxMenu.value = null
+  selectedIcon.value = null
+  wm.open('pacman')
+}
 
 /* ── Desktop icon positions (draggable, persisted) ── */
 const ICON_STORAGE_KEY = 'xp-icon-positions'
@@ -323,7 +450,7 @@ function endIconDrag() {
   window.removeEventListener('touchcancel', endIconDrag)
   if (tap) {
     if (tappedId === 'portfolio') openPortfolio()
-    else if (tappedId === 'pacman') openPacman()
+    else if (tappedId === 'pacman') launchPacman()
   }
 }
 
@@ -343,8 +470,9 @@ function loadIconPositions() {
 }
 
 /* ── Window state ───────────────────────────────── */
+/* isMinimized is a computed backed by the window manager (declared near
+   the top of setup); maximize/geometry stay local to the explorer. */
 const isMaximized = ref(true)   /* will flip to false on desktop in onMounted */
-const isMinimized = ref(false)
 const isDragging = ref(false)
 const pos = ref({ x: 40, y: 24 })
 const size = ref({ w: 1100, h: 700 })
@@ -404,81 +532,27 @@ function endDrag() {
 
 function toggleMaximize() {
   if (isMinimized.value) {
-    isMinimized.value = false
+    wm.restore('portfolio')
     return
   }
   isMaximized.value = !isMaximized.value
 }
 
 function minimize() {
-  isMinimized.value = true
-}
-
-function restoreWindow() {
-  isMinimized.value = !isMinimized.value
+  wm.minimize('portfolio')
 }
 
 function openPortfolio() {
-  isMinimized.value = false
   selectedIcon.value = null
+  startOpen.value = false
+  wm.restore('portfolio')
   if (route.path !== '/') router.push('/')
 }
 
-function openPacman() {
-  isMinimized.value = false
-  selectedIcon.value = null
-  router.push('/games/pacman')
-}
-
 /* ── Photo viewer ───────────────────────────────── */
-const pictureViewerOpen = ref(false)
-const pvPos = ref({ x: 80, y: 60 })
-
-function openPictures() {
+function openPhotos() {
   startOpen.value = false
-  if (typeof window !== 'undefined') {
-    pvPos.value = {
-      x: Math.max(20, Math.round((window.innerWidth - 560) / 2)),
-      y: Math.max(20, Math.round((window.innerHeight - 540) / 2)),
-    }
-  }
-  pictureViewerOpen.value = true
-}
-
-function onPicturesClick() {
-  if (isTouchDevice.value) openPictures()
-}
-
-let pvDragStart = null
-function startPvDrag(e) {
-  if (e.target.closest('.xp-title-buttons')) return
-  const point = e.touches?.[0] || e
-  pvDragStart = {
-    px: point.clientX,
-    py: point.clientY,
-    x: pvPos.value.x,
-    y: pvPos.value.y,
-  }
-  window.addEventListener('mousemove', onPvDrag)
-  window.addEventListener('mouseup', endPvDrag)
-  window.addEventListener('touchmove', onPvDrag, { passive: false })
-  window.addEventListener('touchend', endPvDrag)
-}
-function onPvDrag(e) {
-  if (!pvDragStart) return
-  if (e.cancelable) e.preventDefault()
-  const point = e.touches?.[0] || e
-  pvPos.value = {
-    x: pvDragStart.x + (point.clientX - pvDragStart.px),
-    y: Math.max(0, pvDragStart.y + (point.clientY - pvDragStart.py)),
-  }
-}
-function endPvDrag() {
-  pvDragStart = null
-  window.removeEventListener('mousemove', onPvDrag)
-  window.removeEventListener('mouseup', endPvDrag)
-  window.removeEventListener('touchmove', onPvDrag)
-  window.removeEventListener('touchend', endPvDrag)
+  wm.open('photos')
 }
 
 function fitWindow() {
@@ -536,12 +610,13 @@ function updateClock() {
 }
 
 onMounted(() => {
+  /* Boot animation plays once per session; skip it on later loads. */
+  try { if (sessionStorage.getItem('xp-booted')) booting.value = false } catch {}
   updateClock()
   clockTimer = setInterval(updateClock, 30000)
   updateAppHeight()
   fitWindow()
   loadIconPositions()
-  isTouchDevice.value = window.matchMedia('(pointer: coarse)').matches
   window.addEventListener('resize', fitWindow)
   window.addEventListener('resize', updateAppHeight)
   window.addEventListener('orientationchange', updateAppHeight)
@@ -561,7 +636,9 @@ onBeforeUnmount(() => {
 watch(() => route.path, () => {
   sidebarOpen.value = false
   startOpen.value = false
-  isMinimized.value = false
+  /* A navigation means the explorer content changed — make sure it's
+     visible (and brought forward) even if it was minimised. */
+  if (wm.isMinimized('portfolio')) wm.restore('portfolio')
 })
 </script>
 
@@ -587,6 +664,8 @@ watch(() => route.path, () => {
   position: relative;
   overflow: hidden;
 }
+/* Desktop "Refresh" briefly blinks the icons, like a real repaint. */
+.xp-workspace.refreshing .xp-icon { opacity: 0; }
 
 /* ── Desktop icons ───────────────────────────────── */
 .xp-icon {
@@ -684,10 +763,16 @@ watch(() => route.path, () => {
   grid-template-rows:
     var(--titlebar-h) var(--menubar-h) auto var(--addressbar-h)
     1fr var(--statusbar-h);
-  border: 1px solid var(--xp-window-edge);
+  /* XP.css .window frame: a 3px layered blue bevel drawn with inset
+     shadows. Side padding reveals it alongside the body; the title bar
+     bleeds back over it (margin: 0 -3px) to stay flush at the top. */
+  border: none;
   border-radius: 8px 8px 0 0;
+  padding: 0 3px 3px;
   box-shadow:
-    0 0 0 1px #003BB5 inset,
+    inset -1px -1px #00138c, inset 1px 1px #0831d9,
+    inset -2px -2px #001ea0, inset 2px 2px #166aee,
+    inset -3px -3px #003bda, inset 3px 3px #0855dd,
     0 8px 28px rgba(0, 0, 0, 0.45);
   overflow: hidden;
   background: var(--xp-window);
@@ -706,9 +791,10 @@ watch(() => route.path, () => {
   width: 100% !important;
   height: 100% !important;
   border-radius: 0;
+  padding: 0;
   box-shadow: none;
 }
-.xp-window.maximized .xp-titlebar { border-radius: 0; }
+.xp-window.maximized .xp-titlebar { border-radius: 0; margin: 0; }
 
 .xp-window.minimized {
   transform: translate(-40%, 120vh) scale(0.6);
@@ -721,23 +807,19 @@ watch(() => route.path, () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  /* Bleed 3px over the window's side padding so the title bar sits flush
+     with the outer bevel, exactly like XP.css's .title-bar. */
+  margin: 0 -3px;
   padding: 0 3px 0 6px;
-  background:
-    linear-gradient(180deg,
-      var(--xp-title-1) 0%,
-      var(--xp-title-2) 8%,
-      var(--xp-title-3) 40%,
-      var(--xp-title-2) 88%,
-      var(--xp-title-4) 94%,
-      var(--xp-title-5) 100%);
+  /* Exact Luna gradient + inset text shadow from XP.css .title-bar */
+  background: var(--xp-luna-titlebar);
   color: #fff;
   font-family: var(--font-family-title);
   font-weight: bold;
   font-size: 13px;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.55);
+  text-shadow: 1px 1px #0f1089;
   user-select: none;
   border-radius: 8px 8px 0 0;
-  border-bottom: 1px solid #003BB5;
   cursor: grab;
 }
 .xp-window.dragging .xp-titlebar { cursor: grabbing; }
@@ -760,48 +842,12 @@ watch(() => route.path, () => {
 
 .xp-title-buttons {
   display: flex;
-  gap: 2px;
+  align-items: center;
+  gap: 0;
 }
-
-.xp-tbtn {
-  width: 22px;
-  height: 22px;
-  display: grid;
-  place-items: center;
-  border: 1px solid #003BB5;
-  border-radius: 3px;
-  cursor: pointer;
-  color: #fff;
-  font-family: var(--font-family);
-  font-size: 10px;
-  font-weight: bold;
-  line-height: 1;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
-  background:
-    linear-gradient(180deg, #5FA9FF 0%, #2179E3 50%, #0950C3 100%);
-  box-shadow:
-    inset 1px 1px 0 rgba(255, 255, 255, 0.5),
-    inset -1px -1px 0 rgba(0, 0, 0, 0.15);
-}
-.xp-tbtn:hover {
-  background:
-    linear-gradient(180deg, #7FB9FF 0%, #3F89F3 50%, #1A60D0 100%);
-}
-.xp-tbtn:active {
-  background:
-    linear-gradient(180deg, #0950C3 0%, #2179E3 50%, #5FA9FF 100%);
-}
-.xp-tbtn.close {
-  background:
-    linear-gradient(180deg, #F08C70 0%, #E04A3E 50%, #B71F1F 100%);
-  border-color: #8C1818;
-}
-.xp-tbtn.close:hover {
-  background:
-    linear-gradient(180deg, #F8A88C 0%, #ED5F50 50%, #C42525 100%);
-}
-.xp-tbtn span { display: block; transform: translateY(-1px); }
-.xp-tbtn.min span { transform: translateY(2px); }
+/* The .xp-tbtn window controls (Minimize / Maximize / Restore / Close)
+   are styled globally in assets/scss/_xp-controls.scss using XP.css's
+   pixel-perfect SVGs. */
 
 /* ── Menu bar ────────────────────────────────────── */
 .xp-menubar {
@@ -1086,6 +1132,7 @@ watch(() => route.path, () => {
     inset -1px -1px 0 rgba(255, 255, 255, 0.2);
 }
 .task-icon { width: 14px; height: 14px; flex-shrink: 0; }
+.task-emoji { font-size: 13px; line-height: 1; flex-shrink: 0; }
 .task-label {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1134,14 +1181,14 @@ watch(() => route.path, () => {
   align-items: center;
   gap: 10px;
   padding: 8px 12px;
-  background:
-    linear-gradient(180deg,
-      var(--xp-title-1) 0%, var(--xp-title-3) 50%, var(--xp-title-1) 100%);
+  /* Same Luna gradient as the window title bar (was a mismatched
+     symmetric glass gradient before). */
+  background: var(--xp-luna-titlebar);
   color: #fff;
   font-family: var(--font-family-title);
   font-weight: bold;
   font-size: 14px;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+  text-shadow: 1px 1px #0f1089;
   border-bottom: 2px solid #FF9923;
 }
 .sm-avatar {
@@ -1207,70 +1254,6 @@ watch(() => route.path, () => {
   border-color: #4D6FCD;
 }
 
-/* ── Photo viewer ────────────────────────────────── */
-.pv-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  background: rgba(0, 0, 0, 0.35);
-}
-.pv-window {
-  position: absolute;
-  width: 560px;
-  max-width: 95vw;
-  max-height: 90vh;
-  display: flex;
-  flex-direction: column;
-  background: var(--xp-window);
-  border: 1px solid var(--xp-window-edge);
-  border-radius: 8px;
-  box-shadow:
-    0 0 0 1px #003BB5 inset,
-    0 12px 32px rgba(0, 0, 0, 0.55);
-  overflow: hidden;
-  font-family: var(--font-family);
-}
-.pv-titlebar {
-  flex-shrink: 0;
-  cursor: grab;
-  border-radius: 7px 7px 0 0;
-}
-.pv-title-glyph { font-size: 13px; line-height: 1; }
-.pv-stage {
-  flex: 1;
-  min-height: 0;
-  display: grid;
-  place-items: center;
-  padding: 12px;
-  background: #2A2A2A;
-  overflow: hidden;
-}
-.pv-stage img {
-  max-width: 100%;
-  max-height: 60vh;
-  object-fit: contain;
-  background: #fff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-  -webkit-user-drag: none;
-  user-select: none;
-}
-.pv-statusbar {
-  display: flex;
-  align-items: center;
-  padding: 2px 8px;
-  height: var(--statusbar-h);
-  background: var(--xp-window);
-  border-top: 1px solid #FFFFFF;
-  box-shadow: inset 0 1px 0 var(--xp-divider);
-  font-size: var(--font-size-sm);
-  color: #000;
-}
-
-@media (max-width: 900px) {
-  .pv-window { width: 92vw; }
-  .pv-stage img { max-height: 50vh; }
-}
-
 /* ── Mobile ──────────────────────────────────────── */
 @media (max-width: 900px) {
   /* Anchor the taskbar to the visual-viewport bottom on mobile. Grid
@@ -1294,12 +1277,13 @@ watch(() => route.path, () => {
     width: 100% !important;
     height: calc(100% - var(--taskbar-h) - env(safe-area-inset-bottom, 0px)) !important;
     border-radius: 0;
+    padding: 0;
     box-shadow: none;
     /* Drop the menubar + in-window statusbar rows on mobile. */
     grid-template-rows:
       var(--titlebar-h) auto var(--addressbar-h) 1fr;
   }
-  .xp-titlebar { cursor: default; border-radius: 0; }
+  .xp-titlebar { cursor: default; border-radius: 0; margin: 0; }
   .xp-menubar { display: none; }
   .xp-statusbar { display: none; }
   .xp-toolbar .tb-label { display: none; }
@@ -1311,10 +1295,12 @@ watch(() => route.path, () => {
   .addr-label, .addr-go { display: none; }
   .addr-input { height: 26px; }
 
-  /* Bigger window control buttons — easier to tap. */
+  /* Bigger window control buttons — easier to tap. Stretch the baked-in
+     SVG to fill so the #0050ee backdrop never peeks around the artwork. */
   .xp-tbtn {
-    width: 28px;
-    height: 24px;
+    min-width: 30px;
+    min-height: 24px;
+    background-size: 100% 100%;
   }
 
   .xp-sidebar {
