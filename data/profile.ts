@@ -1,3 +1,20 @@
+/** The single source of truth for who this portfolio belongs to. */
+export interface Profile {
+  name: string
+  username: string
+  role: string
+  company: string
+  city: string
+  country: string
+  /** ISO-ish short code used in the compact location string. */
+  countryShort: string
+  education: string
+  /** Responsive avatar: a default src plus a srcset of widths. */
+  avatar: { src: string; srcset: string }
+  socials: { github: string; linkedin: string; blog: string }
+  site: { url: string; thumbnail: string }
+}
+
 export const profile = {
   name: 'Shoeb Ahmed Tanjim',
   username: 's-a-tanjim',
@@ -20,7 +37,7 @@ export const profile = {
     url: 'https://s-a-tanjim.netlify.app',
     thumbnail: 'https://s-a-tanjim.netlify.app/site-thumbnail.png',
   },
-} as const
+} as const satisfies Profile
 
 export const fullLocation = `${profile.city}, ${profile.country}`
 export const shortLocation = `${profile.city}, ${profile.countryShort}`

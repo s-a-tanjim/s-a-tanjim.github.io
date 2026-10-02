@@ -51,7 +51,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 
 /* Rendered inside an <XpWindow>. `focused` gates keyboard input so the
@@ -97,8 +97,8 @@ const canvasW = COLS * TILE
 const canvasH = ROWS * TILE
 
 /* ── Reactive UI state ──────────────────────────── */
-const canvasRef = ref(null)
-const wrapRef   = ref(null)
+const canvasRef = ref<HTMLCanvasElement | null>(null)
+const wrapRef   = ref<HTMLElement | null>(null)
 const score     = ref(0)
 const highScore = ref(0)
 const lives     = ref(3)
@@ -124,18 +124,53 @@ const buttonText = computed(() => {
 })
 
 /* ── Game state (non-reactive — held in closures) ── */
-let walls           /* boolean[][]    */
-let pellets         /* Set<"c,r">     */
-let powerPellets    /* Set<"c,r">     */
-let pacSpawn        /* {c, r}         */
-let pac             /* Entity         */
-let ghosts          /* Entity[]       */
-let powerTimer      /* seconds remaining in frightened mode */
-let ghostEatStreak  /* how many ghosts eaten on this power pellet */
-let levelStartFreeze /* short pause at level start  */
-let deathFreeze      /* short pause after death     */
-let lastTime
-let animFrame = null
+
+/** A maze tile, by column and row. */
+interface Tile { c: number; r: number }
+/** A unit step; {0,0} means "not moving". */
+interface Vec { x: number; y: number }
+
+/** Pac-Man: sliding from tile (c,r) toward (tc,tr) as `progress` 0→1. */
+interface Pac extends Tile {
+  tc: number
+  tr: number
+  progress: number
+  dir: Vec
+  nextDir: Vec
+  speed: number
+  mouth: number
+  alive: boolean
+}
+
+type GhostMode = 'idle' | 'chase' | 'frightened' | 'eaten'
+
+interface Ghost extends Tile {
+  color: string
+  name: string
+  tc: number
+  tr: number
+  progress: number
+  dir: Vec
+  speed: number
+  mode: GhostMode
+  releaseTime: number
+  personality: number
+}
+
+let walls: boolean[][] = []
+let pellets: Set<string> = new Set()        /* keys are `${c},${r}` */
+let powerPellets: Set<string> = new Set()
+let pacSpawn: Tile = { c: 9, r: 15 }
+/* `!`: resetEntities() assigns these in onMounted, before any update
+   or draw runs, so they are never observed unset. */
+let pac!: Pac
+let ghosts: Ghost[] = []
+let powerTimer = 0       /* seconds remaining in frightened mode */
+let ghostEatStreak = 0   /* how many ghosts eaten on this power pellet */
+let levelStartFreeze = 0 /* short pause at level start  */
+let deathFreeze = 0      /* short pause after death     */
+let lastTime = 0
+let animFrame: number | null = null
 
 /* ── Map building ──────────────────────────────── */
 function buildMap() {
@@ -144,10 +179,11 @@ function buildMap() {
   powerPellets = new Set()
   pacSpawn = { c: 9, r: 15 }
   for (let r = 0; r < ROWS; r++) {
-    walls.push([])
+    const row: boolean[] = []
+    walls.push(row)
     for (let c = 0; c < COLS; c++) {
-      const ch = MAZE_RAW[r][c]
-      walls[r].push(ch === '#')
+      const ch = MAZE_RAW[r]?.[c]
+      row.push(ch === '#')
       if (ch === '.') pellets.add(`${c},${r}`)
       if (ch === 'o') powerPellets.add(`${c},${r}`)
       if (ch === 'P') pacSpawn = { c, r }
@@ -155,18 +191,18 @@ function buildMap() {
   }
 }
 
-function tileChar(c, r) {
+function tileChar(c: number, r: number): string {
   if (r < 0 || r >= ROWS) return '#'
   const cc = ((c % COLS) + COLS) % COLS
-  return MAZE_RAW[r][cc]
+  return MAZE_RAW[r]?.[cc] ?? '#'
 }
 
-function isOpenForPacman(c, r) {
+function isOpenForPacman(c: number, r: number) {
   const ch = tileChar(c, r)
   return ch !== '#' && ch !== '-'
 }
 
-function isOpenForGhost(c, r, eaten) {
+function isOpenForGhost(c: number, r: number, eaten: boolean) {
   const ch = tileChar(c, r)
   if (ch === '#') return false
   if (ch === '-') return eaten   /* door opens only for eaten ghosts */
@@ -174,7 +210,7 @@ function isOpenForGhost(c, r, eaten) {
 }
 
 /* ── Entities ───────────────────────────────────── */
-function makePac() {
+function makePac(): Pac {
   return {
     c: pacSpawn.c, r: pacSpawn.r,
     tc: pacSpawn.c, tr: pacSpawn.r,
@@ -187,18 +223,18 @@ function makePac() {
   }
 }
 
-function makeGhost(i) {
+function makeGhost(i: number): Ghost {
   const colors = ['#ED1B22', '#FFBBE5', '#00FFFF', '#FFB852']
   const names  = ['Blinky', 'Pinky', 'Inky', 'Clyde']
   return {
-    color: colors[i],
-    name: names[i],
+    color: colors[i] ?? '#FFFFFF',
+    name: names[i] ?? 'Ghost',
     c: 9, r: 7,
     tc: 9, tr: 7,
     progress: 0,
     dir: { x: 0, y: -1 },
     speed: 5.4,
-    mode: 'idle',                 /* 'idle' | 'chase' | 'frightened' | 'eaten' */
+    mode: 'idle',
     releaseTime: i * 2.5,
     personality: i,
   }
@@ -214,16 +250,16 @@ function resetEntities() {
 }
 
 /* ── Input ──────────────────────────────────────── */
-function setNextDir(dx, dy) {
+function setNextDir(dx: number, dy: number) {
   if (!pac) return
   pac.nextDir = { x: dx, y: dy }
 }
 
-function onKeyDown(e) {
+function onKeyDown(e: KeyboardEvent) {
   /* Only the focused Pac-Man window reacts to keys, and never while the
      user is typing in a field (e.g. the Command Prompt over the game). */
   if (!props.focused) return
-  const t = e.target
+  const t = e.target as HTMLElement | null
   if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return
   switch (e.key) {
     case 'ArrowLeft':  case 'a': case 'A': setNextDir(-1, 0); e.preventDefault(); break
@@ -236,14 +272,16 @@ function onKeyDown(e) {
   }
 }
 
-let touchStart = null
-function onTouchStart(e) {
+let touchStart: { x: number; y: number } | null = null
+function onTouchStart(e: TouchEvent) {
   const t = e.touches[0]
+  if (!t) return
   touchStart = { x: t.clientX, y: t.clientY }
 }
-function onTouchMove(e) {
+function onTouchMove(e: TouchEvent) {
   if (!touchStart) return
   const t = e.touches[0]
+  if (!t) return
   const dx = t.clientX - touchStart.x
   const dy = t.clientY - touchStart.y
   const ax = Math.abs(dx), ay = Math.abs(dy)
@@ -278,7 +316,7 @@ function pickPacNextTarget() {
   pac.progress = 0
 }
 
-function pickGhostNextTarget(g) {
+function pickGhostNextTarget(g: Ghost) {
   const eaten = g.mode === 'eaten'
   /* If eaten and we're back at the spawn tile, return to chase. */
   if (eaten && g.c === 9 && g.r === 7) {
@@ -301,7 +339,7 @@ function pickGhostNextTarget(g) {
   }
   if (!candidates.length) return
 
-  let chosen
+  let chosen: Vec | undefined
   if (g.mode === 'frightened') {
     chosen = candidates[Math.floor(Math.random() * candidates.length)]
   } else {
@@ -314,13 +352,14 @@ function pickGhostNextTarget(g) {
       if (dist < best) { best = dist; chosen = d }
     }
   }
+  if (!chosen) return
   g.dir = chosen
   g.tc = g.c + chosen.x
   g.tr = g.r + chosen.y
   g.progress = 0
 }
 
-function ghostTarget(g) {
+function ghostTarget(g: Ghost): Tile {
   if (g.mode === 'eaten') return { c: 9, r: 7 }
   const px = pac.c, py = pac.r
   switch (g.personality) {
@@ -330,6 +369,7 @@ function ghostTarget(g) {
       return { c: px + pac.dir.x * 4, r: py + pac.dir.y * 4 }
     case 2: /* Inky — pacman + Blinky-mirror, simplified */
       const b = ghosts[0]
+      if (!b) return { c: px, r: py }
       return {
         c: px + (px - b.c),
         r: py + (py - b.r),
@@ -343,7 +383,7 @@ function ghostTarget(g) {
 }
 
 /* ── Update ────────────────────────────────────── */
-function update(dt) {
+function update(dt: number) {
   if (paused.value) return
   if (gameOver.value || won.value) return
 
@@ -481,11 +521,11 @@ function eatAtPacTile() {
 }
 
 /* ── Render position helpers ───────────────────── */
-function entityX(e) {
+function entityX(e: Pac | Ghost) {
   const dx = (e.tc - e.c) * e.progress
   return (e.c + dx + 0.5) * TILE
 }
-function entityY(e) {
+function entityY(e: Pac | Ghost) {
   const dy = (e.tr - e.r) * e.progress
   return (e.r + dy + 0.5) * TILE
 }
@@ -495,6 +535,7 @@ function draw() {
   const cvs = canvasRef.value
   if (!cvs) return
   const ctx = cvs.getContext('2d')
+  if (!ctx) return
   ctx.fillStyle = '#000'
   ctx.fillRect(0, 0, canvasW, canvasH)
 
@@ -504,7 +545,7 @@ function draw() {
   drawGhosts(ctx)
 }
 
-function drawMaze(ctx) {
+function drawMaze(ctx: CanvasRenderingContext2D) {
   ctx.strokeStyle = '#2A6CD8'
   ctx.lineWidth = 2
   ctx.lineCap = 'round'
@@ -515,7 +556,7 @@ function drawMaze(ctx) {
      wall cell with a rounded rectangle, then draw a darker border. */
   for (let r = 0; r < ROWS; r++) {
     for (let c = 0; c < COLS; c++) {
-      if (!walls[r][c]) continue
+      if (!walls[r]?.[c]) continue
       const x = c * TILE, y = r * TILE
       ctx.fillStyle = '#0E2A8C'
       ctx.fillRect(x + 2, y + 2, TILE - 4, TILE - 4)
@@ -527,7 +568,7 @@ function drawMaze(ctx) {
   /* Ghost door */
   for (let r = 0; r < ROWS; r++) {
     for (let c = 0; c < COLS; c++) {
-      if (MAZE_RAW[r][c] === '-') {
+      if (MAZE_RAW[r]?.[c] === '-') {
         ctx.fillStyle = '#FFBBE5'
         ctx.fillRect(c * TILE + 2, r * TILE + TILE / 2 - 2, TILE - 4, 4)
       }
@@ -535,10 +576,10 @@ function drawMaze(ctx) {
   }
 }
 
-function drawPellets(ctx) {
+function drawPellets(ctx: CanvasRenderingContext2D) {
   ctx.fillStyle = '#FFD9A8'
   for (const key of pellets) {
-    const [c, r] = key.split(',').map(Number)
+    const [c = 0, r = 0] = key.split(',').map(Number)
     ctx.beginPath()
     ctx.arc(c * TILE + TILE / 2, r * TILE + TILE / 2, 2, 0, Math.PI * 2)
     ctx.fill()
@@ -547,14 +588,14 @@ function drawPellets(ctx) {
   const pulse = 0.5 + 0.5 * Math.sin(performance.now() / 180)
   const size = 4 + 2 * pulse
   for (const key of powerPellets) {
-    const [c, r] = key.split(',').map(Number)
+    const [c = 0, r = 0] = key.split(',').map(Number)
     ctx.beginPath()
     ctx.arc(c * TILE + TILE / 2, r * TILE + TILE / 2, size, 0, Math.PI * 2)
     ctx.fill()
   }
 }
 
-function drawPacman(ctx) {
+function drawPacman(ctx: CanvasRenderingContext2D) {
   if (!pac) return
   const x = entityX(pac), y = entityY(pac)
   const open = (Math.sin(pac.mouth) + 1) / 2 * 0.55 + 0.05
@@ -576,12 +617,12 @@ function drawPacman(ctx) {
   ctx.restore()
 }
 
-function drawGhosts(ctx) {
+function drawGhosts(ctx: CanvasRenderingContext2D) {
   for (const g of ghosts) {
     const x = entityX(g), y = entityY(g)
     const radius = TILE * 0.42
 
-    let body = g.color
+    let body: string | null = g.color
     if (g.mode === 'frightened') {
       body = powerTimer < 1.5 && (Math.floor(powerTimer * 6) % 2)
         ? '#FFFFFF' : '#2348C8'
@@ -623,7 +664,7 @@ function drawGhosts(ctx) {
 }
 
 /* ── Loop ──────────────────────────────────────── */
-function loop(t) {
+function loop(t: number) {
   const dt = Math.min((t - lastTime) / 1000, 0.05)
   lastTime = t
   update(dt)
@@ -652,7 +693,7 @@ function togglePause() {
   statusMsg.value = paused.value ? 'Paused' : 'Go!'
 }
 
-function endGame(victory) {
+function endGame(victory: boolean) {
   won.value = victory
   gameOver.value = !victory
   running.value = false

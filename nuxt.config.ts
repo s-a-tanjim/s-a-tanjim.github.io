@@ -101,6 +101,13 @@ export default defineNuxtConfig({
     '~/assets/scss/main.scss',
   ],
 
+  typescript: {
+    /* Run vue-tsc as part of `nuxt build` / `nuxt dev` so type errors
+       fail the build instead of only showing up in the editor. */
+    typeCheck: true,
+    strict: true,
+  },
+
   compatibilityDate: '2024-10-29'
 
   // target: 'static',

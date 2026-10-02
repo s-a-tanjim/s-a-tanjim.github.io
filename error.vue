@@ -45,22 +45,28 @@
   </NuxtLayout>
 </template>
 
-<script setup>
-const props = defineProps({
-  error: { type: Object, required: true },
-})
+<script setup lang="ts">
+import type { NuxtError } from '#app'
+
+const props = defineProps<{
+  error: NuxtError & { url?: string }
+}>()
 
 const route = useRoute()
 const router = useRouter()
 
 const statusText = computed(() => {
-  const map = { 404: 'Page Not Found', 500: 'Server Error' }
-  return map[props.error?.statusCode] || 'Something went wrong'
+  const map: Record<number, string> = { 404: 'Page Not Found', 500: 'Server Error' }
+  /* 0 is never a real status, so an absent code falls through. */
+  return map[props.error.statusCode ?? 0] || 'Something went wrong'
 })
 
-const requestedPath = computed(() =>
-  props.error?.url || props.error?.data?.path || route.fullPath || '/'
-)
+const requestedPath = computed(() => {
+  /* `data` is free-form on NuxtError; Nuxt's router puts the missing
+     route on `.path` when it raises a 404. */
+  const data = props.error.data as { path?: string } | undefined
+  return props.error.url || data?.path || route.fullPath || '/'
+})
 const canGoBack = computed(() => typeof window !== 'undefined' && window.history.length > 1)
 
 const goHome = () => clearError({ redirect: '/' })

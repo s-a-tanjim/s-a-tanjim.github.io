@@ -35,7 +35,7 @@
         @mousedown.stop="startIconDrag('pacman', $event)"
         @touchstart.passive.stop="startIconDrag('pacman', $event)"
         @click.stop="selectedIcon = 'pacman'"
-        @dblclick="launchPacman"
+        @dblclick="launchApp('pacman')"
         @contextmenu.prevent.stop="openIconMenu('pacman', $event)"
       >
         <span class="xp-icon-glyph pacman-glyph">
@@ -46,15 +46,15 @@
 
       <!-- ── The Window ──────────────────────────────── -->
       <div
-        class="xp-window"
-        :class="{ maximized: isMaximized, minimized: isMinimized, dragging: isDragging }"
+        class="xp-window xp-frame"
+        :class="{ maximized: isMaximized, minimized: isMinimized, dragging: isDragging, resizing }"
         :style="[windowStyle, { zIndex: wm.zOf('portfolio') }]"
         @mousedown="wm.focus('portfolio')"
       >
 
       <!-- Title bar -->
       <header
-        class="xp-titlebar"
+        class="xp-titlebar xp-frame-titlebar"
         @mousedown="startDrag"
         @touchstart.passive="startDrag"
         @dblclick="toggleMaximize"
@@ -128,100 +128,23 @@
         <span class="status-resize"></span>
       </footer>
 
+      <XpResizeHandles
+        v-if="measured && !isMaximized && !isMinimized"
+        @start="onResizeStart"
+      />
+
       </div><!-- /.xp-window -->
     </div><!-- /.xp-workspace -->
 
     <!-- ── Taskbar ─────────────────────────────────── -->
-    <div class="xp-taskbar">
-      <button class="xp-start" @click="startOpen = !startOpen">
-        <span class="xp-start-flag">
-          <span class="flag-q1"></span><span class="flag-q2"></span>
-          <span class="flag-q3"></span><span class="flag-q4"></span>
-        </span>
-        <span class="xp-start-label">start</span>
-      </button>
+    <XpTaskbar @toggle-start="startOpen = !startOpen" />
 
-      <div class="xp-tasks">
-        <button
-          v-for="t in tasks"
-          :key="t.id"
-          class="xp-task"
-          :class="{ active: t.focused && !t.minimized }"
-          @click="wm.toggle(t.id)"
-        >
-          <img v-if="t.img" :src="t.img" alt="" class="task-icon" onerror="this.style.display='none'" />
-          <span v-else class="task-emoji">{{ t.icon }}</span>
-          <span class="task-label">{{ t.title }}</span>
-        </button>
-      </div>
-
-      <div class="xp-tray">
-        <span class="tray-icon" title="Volume">🔊</span>
-        <span class="tray-icon" title="Network">📶</span>
-        <span class="tray-clock">{{ clock }}</span>
-      </div>
-    </div>
-
-    <!-- ── Start menu (optional, opens on click) ───── -->
-    <div v-if="startOpen" class="xp-startmenu" @click.self="startOpen = false">
-      <div class="sm-panel">
-        <div class="sm-header">
-          <img
-            :src="profile.avatar.src"
-            :srcset="profile.avatar.srcset"
-            sizes="44px"
-            alt=""
-            class="sm-avatar"
-          />
-          <span class="sm-username">{{ profile.name }}</span>
-        </div>
-        <div class="sm-body">
-          <div class="sm-col sm-col-left">
-            <NuxtLink to="/" class="sm-item" @click="startOpen = false">
-              <span class="sm-bullet">📄</span><span>Home</span>
-            </NuxtLink>
-            <NuxtLink to="/about" class="sm-item" @click="startOpen = false">
-              <span class="sm-bullet">👤</span><span>About me</span>
-            </NuxtLink>
-            <div class="sm-item" @click.stop="openCmd">
-              <span class="sm-bullet">⌨️</span><span>Command Prompt</span>
-            </div>
-            <div class="sm-sep"></div>
-            <a :href="profile.socials.github" target="_blank" rel="noopener" class="sm-item">
-              <span class="sm-bullet">🐙</span><span>GitHub</span>
-            </a>
-            <a :href="profile.socials.linkedin" target="_blank" rel="noopener" class="sm-item">
-              <span class="sm-bullet">💼</span><span>LinkedIn</span>
-            </a>
-            <a :href="profile.socials.blog" target="_blank" rel="noopener" class="sm-item">
-              <span class="sm-bullet">✍️</span><span>Blog</span>
-            </a>
-          </div>
-          <div class="sm-col sm-col-right">
-            <div class="sm-item disabled"><span class="sm-bullet">📂</span><span>My Documents</span></div>
-            <div class="sm-item" @click.stop="openPhotos">
-              <span class="sm-bullet">🖼️</span><span>My Pictures</span>
-            </div>
-            <div class="sm-item" @click.stop="launchPacman">
-              <span class="sm-bullet">🎮</span><span>Pac-Man</span>
-            </div>
-            <div class="sm-sep"></div>
-            <div class="sm-item disabled"><span class="sm-bullet">⚙️</span><span>Control Panel</span></div>
-            <NuxtLink to="/contact" class="sm-item" @click="startOpen = false">
-              <span class="sm-bullet">❓</span><span>Help and Support</span>
-            </NuxtLink>
-          </div>
-        </div>
-        <div class="sm-footer">
-          <button class="sm-foot-btn" @click="startOpen = false">
-            <span class="sm-bullet">🔒</span><span>Log Off</span>
-          </button>
-          <button class="sm-foot-btn" @click="startOpen = false">
-            <span class="sm-bullet">⏻</span><span>Turn Off Computer</span>
-          </button>
-        </div>
-      </div>
-    </div>
+    <!-- ── Start menu (opens from the Start button) ── -->
+    <XpStartMenu
+      v-if="startOpen"
+      @close="startOpen = false"
+      @launch="launchApp"
+    />
 
     <!-- ── Right-click context menu ────────────────── -->
     <xp-context-menu
@@ -247,10 +170,14 @@
       :minimized="wm.isMinimized(w.id)"
       :focused="wm.focusedId.value === w.id"
       :maximizable="w.maximizable"
+      :resizable="w.resizable"
+      :min-w="w.minW"
+      :min-h="w.minH"
       @focus="wm.focus(w.id)"
       @minimize="wm.minimize(w.id)"
       @close="wm.close(w.id)"
       @move="(x, y) => wm.setPos(w.id, x, y)"
+      @resize="(x, y, ww, wh) => wm.setRect(w.id, x, y, ww, wh)"
     >
       <component
         :is="APP_COMPONENTS[w.app]"
@@ -259,18 +186,28 @@
       />
     </XpWindow>
 
-    <!-- ── Boot + Welcome screen (first load) ──────── -->
-    <xp-boot v-if="booting" @done="finishBoot" />
-
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { markRaw } from 'vue'
+import { desktopBounds, type ResizeDir } from '~/composables/useResize'
+import { useDrag } from '~/composables/useDrag'
+import { bindPointerDrag, pointerOf } from '~/composables/pointer'
+import type { CtxItem } from '~/components/xp-context-menu.vue'
 import { profile } from '~/data/profile'
 import PacmanApp from '~/components/apps/PacmanApp.vue'
 import CmdApp from '~/components/apps/CmdApp.vue'
 import PhotoApp from '~/components/apps/PhotoApp.vue'
+
+/* The two desktop icons; their ids double as iconPositions' keys. */
+type IconId = 'portfolio' | 'pacman'
+
+interface CtxMenu {
+  x: number
+  y: number
+  items: CtxItem[]
+}
 
 const route = useRoute()
 const router = useRouter()
@@ -289,41 +226,39 @@ const APP_COMPONENTS = {
 wm.registerPortfolio({ title: `${profile.username} — Portfolio`, img: '/favicon.svg' })
 
 const appWindows = wm.apps          /* reactive array of open app windows */
-const tasks = wm.tasks              /* taskbar buttons (computed) */
 
 const isMinimized = computed(() => wm.isMinimized('portfolio'))
 
 const sidebarOpen = ref(false)
 const startOpen = ref(false)
-const clock = ref('')
-const selectedIcon = ref(null)
+const selectedIcon = ref<IconId | null>(null)
 
-const workspaceRef = ref(null)
+const workspaceRef = ref<HTMLElement | null>(null)
 
-/* ── Boot + Welcome screen (once per browser session) ── */
-const booting = ref(true)
-function finishBoot() {
-  booting.value = false
-  try { sessionStorage.setItem('xp-booted', '1') } catch {}
+/* The desktop box every clamp measures against: the workspace element
+   once mounted, else derived from the viewport and --taskbar-h. */
+function workspaceBox(): { w: number; h: number } {
+  const ws = workspaceRef.value
+  return ws ? { w: ws.clientWidth, h: ws.clientHeight } : desktopBounds()
 }
 
 /* ── Right-click context menus ───────────────────── */
-const ctxMenu = ref(null)
+const ctxMenu = ref<CtxMenu | null>(null)
 const refreshing = ref(false)
 
-function onWorkspaceCtx(e) {
+function onWorkspaceCtx(e: MouseEvent) {
   /* Only the desktop background gets the XP menu; inside a window we
      leave the native menu so text stays selectable/copyable. */
-  if (e.target.closest('.xp-window')) return
+  if ((e.target as HTMLElement | null)?.closest('.xp-window')) return
   e.preventDefault()
   selectedIcon.value = null
   ctxMenu.value = { x: e.clientX, y: e.clientY, items: desktopMenuItems() }
 }
-function openIconMenu(id, e) {
+function openIconMenu(id: IconId, e: MouseEvent) {
   selectedIcon.value = id
   ctxMenu.value = { x: e.clientX, y: e.clientY, items: iconMenuItems(id) }
 }
-function desktopMenuItems() {
+function desktopMenuItems(): CtxItem[] {
   return [
     { label: 'Arrange Icons By', icon: '▦', children: [
       { label: 'Name', action: 'arrange' },
@@ -340,7 +275,7 @@ function desktopMenuItems() {
     { label: 'Properties', disabled: true },
   ]
 }
-function iconMenuItems(id) {
+function iconMenuItems(id: IconId): CtxItem[] {
   return [
     { label: 'Open', bold: true, action: id === 'pacman' ? 'open-pacman' : 'open-portfolio' },
     { separator: true },
@@ -353,13 +288,15 @@ function iconMenuItems(id) {
     { label: 'Properties', disabled: true },
   ]
 }
-function onCtxSelect(action) {
+/* Rows without an `action` (a submenu parent's placeholder) emit
+   undefined; the switch simply ignores them. */
+function onCtxSelect(action: string | undefined) {
   switch (action) {
     case 'refresh': doRefresh(); break
     case 'arrange': arrangeIcons(); break
-    case 'cmd': openCmd(); break
+    case 'cmd': launchApp('cmd'); break
     case 'open-portfolio': openPortfolio(); break
-    case 'open-pacman': launchPacman(); break
+    case 'open-pacman': launchApp('pacman'); break
   }
 }
 function doRefresh() {
@@ -373,33 +310,42 @@ function arrangeIcons() {
 }
 
 /* ── App launchers ───────────────────────────────── */
-function openCmd() {
-  startOpen.value = false
-  ctxMenu.value = null
-  wm.open('cmd')
-}
-function launchPacman() {
+/* Every launcher — Start menu, desktop icon, context menu — dismisses
+   the shell UI first, then opens the window. */
+function launchApp(app: AppKey) {
   startOpen.value = false
   ctxMenu.value = null
   selectedIcon.value = null
-  wm.open('pacman')
+  wm.open(app)
 }
 
 /* ── Desktop icon positions (draggable, persisted) ── */
 const ICON_STORAGE_KEY = 'xp-icon-positions'
-const iconPositions = reactive({
+const iconPositions = reactive<Record<IconId, { x: number; y: number }>>({
   portfolio: { x: 12, y: 12 },
   pacman:    { x: 12, y: 100 },
 })
 
-let iconDrag = null
+interface IconDrag {
+  id: IconId
+  startX: number
+  startY: number
+  mouseX: number
+  mouseY: number
+  moved: boolean
+  isTouch: boolean
+}
+let iconDrag: IconDrag | null = null
+let releaseIconDrag: (() => void) | null = null
 
-function startIconDrag(id, e) {
+function startIconDrag(id: IconId, e: MouseEvent | TouchEvent) {
   /* preventDefault on mousedown blocks the browser's native image
      drag-and-drop, which would otherwise swallow mousemove/mouseup
      and leave the icon "following" the cursor. */
-  if (!e.touches && e.cancelable) e.preventDefault()
-  const point = e.touches?.[0] || e
+  const isTouch = 'touches' in e
+  if (!isTouch && e.cancelable) e.preventDefault()
+  const point = pointerOf(e)
+  if (!point) return
   iconDrag = {
     id,
     startX: iconPositions[id].x,
@@ -407,19 +353,16 @@ function startIconDrag(id, e) {
     mouseX: point.clientX,
     mouseY: point.clientY,
     moved: false,
-    isTouch: !!e.touches,
+    isTouch,
   }
   selectedIcon.value = id
-  window.addEventListener('mousemove', onIconDrag)
-  window.addEventListener('mouseup', endIconDrag)
-  window.addEventListener('touchmove', onIconDrag, { passive: false })
-  window.addEventListener('touchend', endIconDrag)
-  window.addEventListener('touchcancel', endIconDrag)
+  releaseIconDrag = bindPointerDrag(onIconDrag, endIconDrag)
 }
 
-function onIconDrag(e) {
+function onIconDrag(e: MouseEvent | TouchEvent) {
   if (!iconDrag) return
-  const point = e.touches?.[0] || e
+  const point = pointerOf(e)
+  if (!point) return
   const dx = point.clientX - iconDrag.mouseX
   const dy = point.clientY - iconDrag.mouseY
   if (!iconDrag.moved && (Math.abs(dx) > 3 || Math.abs(dy) > 3)) {
@@ -427,9 +370,9 @@ function onIconDrag(e) {
   }
   if (!iconDrag.moved) return
   if (e.cancelable) e.preventDefault()
-  const ws = workspaceRef.value
-  const maxX = (ws?.clientWidth  || window.innerWidth)  - 80
-  const maxY = (ws?.clientHeight || window.innerHeight) - 90
+  const area = workspaceBox()
+  const maxX = area.w - 80
+  const maxY = area.h - 90   /* leave room for the icon's glyph + label */
   iconPositions[iconDrag.id].x = Math.max(0, Math.min(maxX, iconDrag.startX + dx))
   iconPositions[iconDrag.id].y = Math.max(0, Math.min(maxY, iconDrag.startY + dy))
 }
@@ -443,14 +386,11 @@ function endIconDrag() {
     try { localStorage.setItem(ICON_STORAGE_KEY, JSON.stringify(iconPositions)) } catch {}
   }
   iconDrag = null
-  window.removeEventListener('mousemove', onIconDrag)
-  window.removeEventListener('mouseup', endIconDrag)
-  window.removeEventListener('touchmove', onIconDrag)
-  window.removeEventListener('touchend', endIconDrag)
-  window.removeEventListener('touchcancel', endIconDrag)
+  releaseIconDrag?.()
+  releaseIconDrag = null
   if (tap) {
     if (tappedId === 'portfolio') openPortfolio()
-    else if (tappedId === 'pacman') launchPacman()
+    else if (tappedId === 'pacman') launchApp('pacman')
   }
 }
 
@@ -458,7 +398,7 @@ function loadIconPositions() {
   try {
     const saved = JSON.parse(localStorage.getItem(ICON_STORAGE_KEY) || 'null')
     if (saved && typeof saved === 'object') {
-      for (const id of Object.keys(iconPositions)) {
+      for (const id of Object.keys(iconPositions) as IconId[]) {
         if (saved[id]
             && typeof saved[id].x === 'number'
             && typeof saved[id].y === 'number') {
@@ -472,13 +412,19 @@ function loadIconPositions() {
 /* ── Window state ───────────────────────────────── */
 /* isMinimized is a computed backed by the window manager (declared near
    the top of setup); maximize/geometry stay local to the explorer. */
-const isMaximized = ref(true)   /* will flip to false on desktop in onMounted */
-const isDragging = ref(false)
+const isMaximized = ref(false)
 const pos = ref({ x: 40, y: 24 })
 const size = ref({ w: 1100, h: 700 })
 
+/* Until fitWindow() has measured the desktop (first paint is server-side,
+   where there is no viewport) we emit no inline geometry at all, so the
+   CSS defaults below — which centre the window with the same numbers —
+   decide where it lands. That keeps the first frame identical to the
+   hydrated one instead of flashing a full-screen window. */
+const measured = ref(false)
+
 const windowStyle = computed(() => {
-  if (isMaximized.value) return {}
+  if (isMaximized.value || !measured.value) return {}
   return {
     left: pos.value.x + 'px',
     top: pos.value.y + 'px',
@@ -488,46 +434,43 @@ const windowStyle = computed(() => {
 })
 
 /* Drag handling ----------------------------------- */
-let dragStart = null
+/* The explorer may hang off the left (minX is negative) so a wide
+   window can be pushed aside, but never past its own title buttons. */
+const { dragging: isDragging, startDrag } = useDrag({
+  getPos: () => pos.value,
+  setPos: (p) => { pos.value = p },
+  limits: () => {
+    const area = workspaceBox()
+    return {
+      minX: -(size.value.w - 120),
+      maxX: area.w - 80,
+      minY: 0,
+      maxY: area.h - 30,
+    }
+  },
+  disabled: () => isMaximized.value,
+})
 
-function startDrag(e) {
-  if (isMaximized.value) return
-  if (e.target.closest('.xp-title-buttons')) return
-  const point = e.touches?.[0] || e
-  dragStart = {
-    px: point.clientX,
-    py: point.clientY,
-    x: pos.value.x,
-    y: pos.value.y,
-  }
-  isDragging.value = true
-  window.addEventListener('mousemove', onDrag)
-  window.addEventListener('mouseup', endDrag)
-  window.addEventListener('touchmove', onDrag, { passive: false })
-  window.addEventListener('touchend', endDrag)
-}
+/* Resizing --------------------------------------- */
+/* Once the explorer has been resized by hand we stop re-centring it on
+   browser resize and only keep it inside the desktop. */
+const userSized = ref(false)
 
-function onDrag(e) {
-  if (!dragStart) return
-  if (e.cancelable) e.preventDefault()
-  const point = e.touches?.[0] || e
-  const ws = workspaceRef.value
-  const maxX = ws ? ws.clientWidth - 80 : window.innerWidth - 80
-  const maxY = ws ? ws.clientHeight - 30 : window.innerHeight - 30
-  const minX = -(size.value.w - 120)
-  pos.value = {
-    x: Math.max(minX, Math.min(maxX, dragStart.x + (point.clientX - dragStart.px))),
-    y: Math.max(0, Math.min(maxY, dragStart.y + (point.clientY - dragStart.py))),
-  }
-}
+const { resizing, startResize } = useResize({
+  getRect: () => ({ ...pos.value, ...size.value }),
+  setRect: (r) => {
+    pos.value = { x: r.x, y: r.y }
+    size.value = { w: r.w, h: r.h }
+  },
+  min: { w: 420, h: 320 },
+  bounds: workspaceBox,
+  disabled: () => isMaximized.value || isMinimized.value,
+  onEnd: () => { userSized.value = true },
+})
 
-function endDrag() {
-  dragStart = null
-  isDragging.value = false
-  window.removeEventListener('mousemove', onDrag)
-  window.removeEventListener('mouseup', endDrag)
-  window.removeEventListener('touchmove', onDrag)
-  window.removeEventListener('touchend', endDrag)
+function onResizeStart(dir: ResizeDir, e: MouseEvent | TouchEvent) {
+  wm.focus('portfolio')
+  startResize(dir, e)
 }
 
 function toggleMaximize() {
@@ -549,26 +492,42 @@ function openPortfolio() {
   if (route.path !== '/') router.push('/')
 }
 
-/* ── Photo viewer ───────────────────────────────── */
-function openPhotos() {
-  startOpen.value = false
-  wm.open('photos')
-}
-
 function fitWindow() {
   if (typeof window === 'undefined') return
-  const small = window.innerWidth < 900
-  if (small) {
+  if (window.innerWidth < 900) {
+    /* Phones get the full-bleed window; the mobile media query already
+       paints it that way, so there is nothing to measure. */
     isMaximized.value = true
     return
   }
   isMaximized.value = false
-  const w = Math.min(1100, window.innerWidth - 80)
-  const h = Math.min(700, window.innerHeight - 80)
+
+  /* The workspace is the desktop minus the taskbar — the same box the
+     CSS percentages below resolve against. */
+  const { w: aw, h: ah } = workspaceBox()
+
+  if (userSized.value) {
+    clampWindow(aw, ah)
+  } else {
+    const w = Math.min(1100, aw - 80)
+    const h = Math.min(700, ah - 40)
+    size.value = { w, h }
+    pos.value = {
+      x: Math.max(20, Math.round((aw - w) / 2)),
+      y: Math.max(20, Math.round((ah - h) / 2)),
+    }
+  }
+  measured.value = true
+}
+
+/* Shrink/nudge a hand-sized window back into a smaller desktop. */
+function clampWindow(aw: number, ah: number) {
+  const w = Math.max(420, Math.min(size.value.w, aw - 24))
+  const h = Math.max(320, Math.min(size.value.h, ah - 24))
   size.value = { w, h }
   pos.value = {
-    x: Math.max(20, Math.round((window.innerWidth - w) / 2)),
-    y: Math.max(20, Math.round((window.innerHeight - 30 - h) / 2)),
+    x: Math.max(0, Math.min(pos.value.x, aw - w)),
+    y: Math.max(0, Math.min(pos.value.y, ah - h)),
   }
 }
 
@@ -598,22 +557,7 @@ const statusText = computed(() => {
 const canGoBack = computed(() => route.path !== '/')
 const goBack = () => { if (canGoBack.value) router.back() }
 
-/* ── Clock ──────────────────────────────────────── */
-let clockTimer
-function updateClock() {
-  const d = new Date()
-  let h = d.getHours()
-  const m = d.getMinutes().toString().padStart(2, '0')
-  const ampm = h >= 12 ? 'PM' : 'AM'
-  h = h % 12 || 12
-  clock.value = `${h}:${m} ${ampm}`
-}
-
 onMounted(() => {
-  /* Boot animation plays once per session; skip it on later loads. */
-  try { if (sessionStorage.getItem('xp-booted')) booting.value = false } catch {}
-  updateClock()
-  clockTimer = setInterval(updateClock, 30000)
   updateAppHeight()
   fitWindow()
   loadIconPositions()
@@ -624,12 +568,11 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-  clearInterval(clockTimer)
   window.removeEventListener('resize', fitWindow)
   window.removeEventListener('resize', updateAppHeight)
   window.removeEventListener('orientationchange', updateAppHeight)
   window.visualViewport?.removeEventListener('resize', updateAppHeight)
-  endDrag()
+  /* useDrag/useResize unhook themselves; the icon drag is hand-rolled. */
   endIconDrag()
 })
 
@@ -754,33 +697,27 @@ watch(() => route.path, () => {
 
 /* ── The Window ──────────────────────────────────── */
 .xp-window {
+  /* Mirrors fitWindow(): the first paint already lands where the measured
+     window will, so hydration moves nothing. */
+  --win-w: min(1100px, 100% - 80px);
+  --win-h: min(700px, 100% - 40px);
   position: absolute;
-  left: 40px;
-  top: 24px;
-  width: 1100px;
-  height: 700px;
+  left: max(20px, calc((100% - var(--win-w)) / 2));
+  top: max(20px, calc((100% - var(--win-h)) / 2));
+  width: var(--win-w);
+  height: var(--win-h);
+  /* Frame, padding and background come from .xp-frame. */
   display: grid;
   grid-template-rows:
     var(--titlebar-h) var(--menubar-h) auto var(--addressbar-h)
     1fr var(--statusbar-h);
-  /* XP.css .window frame: a 3px layered blue bevel drawn with inset
-     shadows. Side padding reveals it alongside the body; the title bar
-     bleeds back over it (margin: 0 -3px) to stay flush at the top. */
-  border: none;
-  border-radius: 8px 8px 0 0;
-  padding: 0 3px 3px;
-  box-shadow:
-    inset -1px -1px #00138c, inset 1px 1px #0831d9,
-    inset -2px -2px #001ea0, inset 2px 2px #166aee,
-    inset -3px -3px #003bda, inset 3px 3px #0855dd,
-    0 8px 28px rgba(0, 0, 0, 0.45);
-  overflow: hidden;
-  background: var(--xp-window);
+  box-shadow: var(--xp-bevel), 0 8px 28px rgba(0, 0, 0, 0.45);
   transition: transform 0.18s ease, opacity 0.18s ease;
   will-change: transform;
 }
 
-.xp-window.dragging {
+.xp-window.dragging,
+.xp-window.resizing {
   transition: none;
   user-select: none;
 }
@@ -803,25 +740,8 @@ watch(() => route.path, () => {
 }
 
 /* ── Title bar ───────────────────────────────────── */
-.xp-titlebar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  /* Bleed 3px over the window's side padding so the title bar sits flush
-     with the outer bevel, exactly like XP.css's .title-bar. */
-  margin: 0 -3px;
-  padding: 0 3px 0 6px;
-  /* Exact Luna gradient + inset text shadow from XP.css .title-bar */
-  background: var(--xp-luna-titlebar);
-  color: #fff;
-  font-family: var(--font-family-title);
-  font-weight: bold;
-  font-size: 13px;
-  text-shadow: 1px 1px #0f1089;
-  user-select: none;
-  border-radius: 8px 8px 0 0;
-  cursor: grab;
-}
+/* Luna gradient and text styling come from .xp-frame-titlebar; the
+   grid row supplies this bar's height. */
 .xp-window.dragging .xp-titlebar { cursor: grabbing; }
 .xp-window.maximized .xp-titlebar { cursor: default; }
 .xp-title-buttons button { cursor: pointer; }
@@ -1015,6 +935,7 @@ watch(() => route.path, () => {
 .status-cell.main { flex: 1; }
 .status-resize {
   width: 18px;
+  cursor: nwse-resize !important;
   background:
     linear-gradient(135deg,
       transparent 0%, transparent 45%,
@@ -1026,249 +947,15 @@ watch(() => route.path, () => {
       transparent 90%);
 }
 
-/* ── Taskbar ─────────────────────────────────────── */
-.xp-taskbar {
-  display: flex;
-  align-items: stretch;
-  height: calc(var(--taskbar-h) + env(safe-area-inset-bottom, 0px));
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-  background:
-    linear-gradient(180deg,
-      #1F3FA5 0%,
-      var(--xp-taskbar-2) 8%,
-      var(--xp-taskbar-1) 50%,
-      var(--xp-taskbar-2) 92%,
-      #1F3FA5 100%);
-  border-top: 1px solid #0831D9;
-  box-shadow: inset 0 1px 0 #6090F0;
-  position: relative;
-  z-index: 90;
-}
 
-/* Start button */
-.xp-start {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 0 22px 0 8px;
-  height: 100%;
-  background:
-    linear-gradient(180deg,
-      #5EAC56 0%,
-      #4FA052 8%,
-      var(--xp-start-2) 50%,
-      #336F31 92%,
-      #245021 100%);
-  border: none;
-  border-right: 1px solid #245021;
-  border-top-right-radius: 12px;
-  border-bottom-right-radius: 12px;
-  color: #fff;
-  cursor: pointer;
-  font-family: var(--font-family-title);
-  font-style: italic;
-  font-size: 17px;
-  font-weight: bold;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.55);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.4),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.25);
-}
-.xp-start:hover {
-  background:
-    linear-gradient(180deg,
-      #6FBC65 0%, #5BA958 8%,
-      #4A9E47 50%, #3D8538 92%, #2C6429 100%);
-}
-
-.xp-start-flag {
-  display: grid;
-  grid-template-columns: 8px 8px;
-  grid-template-rows: 8px 8px;
-  gap: 1px;
-  transform: rotate(-12deg) skew(-8deg, 0);
-  filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.3));
-}
-.flag-q1 { background: #E04A3E; border-radius: 2px 0 0 0; }
-.flag-q2 { background: #5EAC56; border-radius: 0 2px 0 0; }
-.flag-q3 { background: #3F8CF3; border-radius: 0 0 0 2px; }
-.flag-q4 { background: #FFC83D; border-radius: 0 0 2px 0; }
-
-.xp-start-label { letter-spacing: 0.02em; }
-
-/* Task list */
-.xp-tasks {
-  display: flex;
-  gap: 3px;
-  padding: 3px 4px;
-  align-items: stretch;
-  flex: 1;
-  min-width: 0;
-}
-.xp-task {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 0 8px;
-  height: 100%;
-  min-width: 0;
-  max-width: 220px;
-  background: linear-gradient(180deg, #3F8CF3 0%, #245EDB 100%);
-  border: 1px solid #0831D9;
-  border-radius: 3px;
-  color: #fff;
-  font-family: var(--font-family);
-  font-size: var(--font-size-sm);
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.35);
-  cursor: pointer;
-  box-shadow:
-    inset 1px 1px 0 rgba(255, 255, 255, 0.3),
-    inset -1px -1px 0 rgba(0, 0, 0, 0.2);
-}
-.xp-task.active {
-  background: linear-gradient(180deg, #1A4BAE 0%, #2A6CD8 100%);
-  box-shadow:
-    inset 1px 1px 0 rgba(0, 0, 0, 0.3),
-    inset -1px -1px 0 rgba(255, 255, 255, 0.2);
-}
-.task-icon { width: 14px; height: 14px; flex-shrink: 0; }
-.task-emoji { font-size: 13px; line-height: 1; flex-shrink: 0; }
-.task-label {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* Tray */
-.xp-tray {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 0 10px 0 8px;
-  margin: 3px 3px 3px 0;
-  background: linear-gradient(180deg, #1042B2 0%, #1B58CB 50%, #1042B2 100%);
-  border-radius: 3px;
-  border: 1px solid #0A2980;
-  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.15);
-  color: #fff;
-  font-size: var(--font-size-sm);
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
-}
-.tray-icon { opacity: 0.95; font-size: 12px; line-height: 1; }
-.tray-clock { padding-left: 4px; min-width: 64px; text-align: center; }
-
-/* ── Start menu ──────────────────────────────────── */
-.xp-startmenu {
-  position: fixed;
-  inset: 0;
-  z-index: 95;
-}
-.sm-panel {
-  position: absolute;
-  left: 0;
-  bottom: calc(var(--taskbar-h) + env(safe-area-inset-bottom, 0px));
-  width: 380px;
-  max-width: 95vw;
-  background: var(--xp-window);
-  border: 1px solid #003BB5;
-  border-radius: 8px 8px 0 0;
-  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.35);
-  overflow: hidden;
-  font-size: var(--font-size-sm);
-}
-.sm-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 12px;
-  /* Same Luna gradient as the window title bar (was a mismatched
-     symmetric glass gradient before). */
-  background: var(--xp-luna-titlebar);
-  color: #fff;
-  font-family: var(--font-family-title);
-  font-weight: bold;
-  font-size: 14px;
-  text-shadow: 1px 1px #0f1089;
-  border-bottom: 2px solid #FF9923;
-}
-.sm-avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 4px;
-  border: 2px solid #fff;
-  object-fit: cover;
-  box-shadow: 0 0 0 1px #003BB5;
-}
-.sm-body {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  background: linear-gradient(90deg, #fff 0%, #fff 50%, #D8E4F8 50%, #D8E4F8 100%);
-}
-.sm-col { padding: 8px 4px; }
-.sm-col-right { background: #D8E4F8; }
-.sm-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 5px 10px;
-  color: #000;
-  cursor: pointer;
-  border-radius: 2px;
-  text-decoration: none;
-}
-.sm-item:hover:not(.disabled) {
-  background: var(--xp-selection);
-  color: #fff;
-}
-.sm-item.disabled { color: #8A8A8A; cursor: default; }
-.sm-bullet { width: 18px; text-align: center; flex-shrink: 0; }
-.sm-sep {
-  height: 1px;
-  background: var(--xp-divider);
-  margin: 4px 8px;
-}
-.sm-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 6px;
-  padding: 6px 10px;
-  background:
-    linear-gradient(180deg, #BFD0EE 0%, #8AAEE0 100%);
-  border-top: 1px solid #4D6FCD;
-}
-.sm-foot-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 3px 10px;
-  background: transparent;
-  border: 1px solid transparent;
-  border-radius: 3px;
-  color: #000;
-  font-family: var(--font-family);
-  font-size: var(--font-size-sm);
-  cursor: pointer;
-}
-.sm-foot-btn:hover {
-  background: rgba(255, 255, 255, 0.4);
-  border-color: #4D6FCD;
-}
 
 /* ── Mobile ──────────────────────────────────────── */
 @media (max-width: 900px) {
-  /* Anchor the taskbar to the visual-viewport bottom on mobile. Grid
-     placement alone can fail on phones because the workspace's 1fr row
-     resolves against the layout viewport, leaving the taskbar below
-     the visible area when the URL bar is showing. */
+  /* The taskbar pins itself to the visual-viewport bottom (see
+     XpTaskbar.vue); collapse its grid row so it does not also
+     reserve space here. */
   .xp-desktop {
     grid-template-rows: 1fr 0;
-  }
-  .xp-taskbar {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 90;
   }
   .xp-window {
     /* Forced full-bleed on small screens (also locked by JS) */
@@ -1323,21 +1010,10 @@ watch(() => route.path, () => {
     z-index: 40;
     background: rgba(0, 0, 0, 0.3);
   }
-
-  /* Taskbar: keep start button + tray visible, let tasks shrink. */
-  .xp-task .task-label { display: none; }
-  .xp-task { max-width: 44px; padding: 0 6px; }
-  .xp-start { padding: 0 14px 0 6px; font-size: 15px; }
-  .xp-tray { padding: 0 6px; gap: 4px; }
-  .tray-icon { font-size: 11px; }
-  .tray-clock { min-width: 0; padding-left: 2px; font-size: var(--font-size-xs); }
-
-  .sm-panel { width: 92vw; }
 }
 
 /* ── Very small phones (<= 480px) ──────────────────── */
 @media (max-width: 480px) {
-  .xp-tasks { padding: 3px 2px; }
   .xp-icon { width: 64px; }
   .xp-icon-glyph, .xp-icon-glyph img { width: 32px; height: 32px; }
 }

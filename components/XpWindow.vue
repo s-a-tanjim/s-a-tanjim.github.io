@@ -1,12 +1,12 @@
 <template>
   <div
-    class="xpw"
-    :class="{ minimized, maximized: isMax, focused, dragging }"
+    class="xpw xp-frame"
+    :class="{ minimized, maximized: isMax, focused, dragging, resizing }"
     :style="winStyle"
     @mousedown="emit('focus')"
   >
     <header
-      class="xpw-titlebar"
+      class="xpw-titlebar xp-frame-titlebar"
       @mousedown="startDrag"
       @touchstart.passive="startDrag"
       @dblclick="maximizable && toggleMax()"
@@ -31,35 +31,68 @@
     <div class="xpw-body">
       <slot />
     </div>
+
+    <XpResizeHandles v-if="resizable && !isMax && !minimized" @start="onResizeStart" />
   </div>
 </template>
 
-<script setup>
-const props = defineProps({
-  title: { type: String, default: 'Window' },
-  icon: { type: String, default: '' },
-  x: { type: Number, default: 120 },
-  y: { type: Number, default: 90 },
-  w: { type: Number, default: 480 },
-  h: { type: Number, default: 360 },
-  z: { type: Number, default: 40 },
-  minimized: { type: Boolean, default: false },
-  focused: { type: Boolean, default: true },
-  maximizable: { type: Boolean, default: true },
-})
-const emit = defineEmits(['focus', 'close', 'minimize', 'move'])
+<script setup lang="ts">
+import { desktopBounds, useResize, type ResizeDir } from '~/composables/useResize'
+import { useDrag } from '~/composables/useDrag'
+
+const props = withDefaults(
+  defineProps<{
+    title?: string
+    icon?: string
+    /* Opening geometry; the window owns it from then on. */
+    x?: number
+    y?: number
+    w?: number
+    h?: number
+    z?: number
+    minimized?: boolean
+    focused?: boolean
+    maximizable?: boolean
+    resizable?: boolean
+    minW?: number
+    minH?: number
+  }>(),
+  {
+    title: 'Window',
+    icon: '',
+    x: 120,
+    y: 90,
+    w: 480,
+    h: 360,
+    z: 40,
+    minimized: false,
+    focused: true,
+    maximizable: true,
+    resizable: true,
+    minW: 280,
+    minH: 160,
+  },
+)
+
+const emit = defineEmits<{
+  focus: []
+  close: []
+  minimize: []
+  move: [x: number, y: number]
+  resize: [x: number, y: number, w: number, h: number]
+}>()
 
 const pos = reactive({ x: props.x, y: props.y })
+const size = reactive({ w: props.w, h: props.h })
 const isMax = ref(false)
-const dragging = ref(false)
 
 const winStyle = computed(() => {
   if (isMax.value) return { zIndex: props.z }
   return {
     left: pos.x + 'px',
     top: pos.y + 'px',
-    width: props.w + 'px',
-    height: props.h + 'px',
+    width: size.w + 'px',
+    height: size.h + 'px',
     zIndex: props.z,
   }
 })
@@ -67,57 +100,49 @@ const winStyle = computed(() => {
 function toggleMax() { isMax.value = !isMax.value }
 
 /* ── Dragging ─────────────────────────────────────── */
-let drag = null
-function startDrag(e) {
-  if (isMax.value) return
-  if (e.target.closest('.xp-title-buttons')) return
-  const p = e.touches?.[0] || e
-  drag = { px: p.clientX, py: p.clientY, x: pos.x, y: pos.y }
-  dragging.value = true
-  window.addEventListener('mousemove', onDrag)
-  window.addEventListener('mouseup', endDrag)
-  window.addEventListener('touchmove', onDrag, { passive: false })
-  window.addEventListener('touchend', endDrag)
+/* Keep a sliver of the title bar reachable so a window can always be
+   dragged back from an edge. */
+const { dragging, startDrag } = useDrag({
+  getPos: () => ({ x: pos.x, y: pos.y }),
+  setPos: (p) => { pos.x = p.x; pos.y = p.y },
+  limits: () => ({
+    minX: 0,
+    maxX: window.innerWidth - 80,
+    minY: 0,
+    maxY: window.innerHeight - 40,
+  }),
+  disabled: () => isMax.value,
+  onEnd: (p) => emit('move', p.x, p.y),
+})
+
+/* ── Resizing ────────────────────────────────────── */
+const { resizing, startResize } = useResize({
+  getRect: () => ({ x: pos.x, y: pos.y, w: size.w, h: size.h }),
+  setRect: (r) => { pos.x = r.x; pos.y = r.y; size.w = r.w; size.h = r.h },
+  min: { w: props.minW, h: props.minH },
+  /* .xpw is position: fixed, so the desktop itself is the bounding box. */
+  bounds: desktopBounds,
+  disabled: () => !props.resizable || isMax.value || props.minimized,
+  onEnd: (r) => emit('resize', r.x, r.y, r.w, r.h),
+})
+
+function onResizeStart(dir: ResizeDir, e: MouseEvent | TouchEvent) {
+  emit('focus')
+  startResize(dir, e)
 }
-function onDrag(e) {
-  if (!drag) return
-  if (e.cancelable) e.preventDefault()
-  const p = e.touches?.[0] || e
-  pos.x = Math.max(0, Math.min(window.innerWidth - 80, drag.x + (p.clientX - drag.px)))
-  pos.y = Math.max(0, Math.min(window.innerHeight - 40, drag.y + (p.clientY - drag.py)))
-}
-function endDrag() {
-  drag = null
-  dragging.value = false
-  emit('move', pos.x, pos.y)
-  window.removeEventListener('mousemove', onDrag)
-  window.removeEventListener('mouseup', endDrag)
-  window.removeEventListener('touchmove', onDrag)
-  window.removeEventListener('touchend', endDrag)
-}
-onBeforeUnmount(endDrag)
 </script>
 
 <style scoped>
 .xpw {
+  /* Frame, padding and background come from .xp-frame. */
   position: fixed;
   display: flex;
   flex-direction: column;
-  background: var(--xp-window);
-  border: none;
-  border-radius: 8px 8px 0 0;
-  /* XP.css .window 3px blue bevel */
-  box-shadow:
-    inset -1px -1px #00138c, inset 1px 1px #0831d9,
-    inset -2px -2px #001ea0, inset 2px 2px #166aee,
-    inset -3px -3px #003bda, inset 3px 3px #0855dd,
-    0 12px 32px rgba(0, 0, 0, 0.5);
-  padding: 0 3px 3px;
-  overflow: hidden;
-  font-family: var(--font-family);
+  box-shadow: var(--xp-bevel), 0 12px 32px rgba(0, 0, 0, 0.5);
 }
 .xpw.minimized { display: none; }
-.xpw.dragging { user-select: none; }
+.xpw.dragging,
+.xpw.resizing { user-select: none; }
 .xpw.maximized {
   left: 0 !important;
   top: 0 !important;
@@ -129,22 +154,10 @@ onBeforeUnmount(endDrag)
 }
 
 .xpw-titlebar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  /* Luna gradient and text styling come from .xp-frame-titlebar; the
+     flex column needs an explicit height that cannot shrink. */
   height: var(--titlebar-h);
   flex-shrink: 0;
-  margin: 0 -3px;
-  padding: 0 3px 0 6px;
-  background: var(--xp-luna-titlebar);
-  color: #fff;
-  font-family: var(--font-family-title);
-  font-weight: bold;
-  font-size: 13px;
-  text-shadow: 1px 1px #0f1089;
-  border-radius: 8px 8px 0 0;
-  cursor: grab;
-  user-select: none;
 }
 .xpw.dragging .xpw-titlebar { cursor: grabbing; }
 .xpw.maximized .xpw-titlebar { margin: 0; border-radius: 0; cursor: default; }

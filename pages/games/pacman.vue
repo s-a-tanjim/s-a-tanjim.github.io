@@ -2,7 +2,7 @@
   <div class="pacman-redirect">Opening Pac-Man…</div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const wm = useWindows()
 const router = useRouter()
 

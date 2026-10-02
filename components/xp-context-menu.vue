@@ -43,19 +43,42 @@
   </div>
 </template>
 
-<script setup>
-const props = defineProps({
-  items: { type: Array, required: true },
-  x: { type: Number, default: 0 },
-  y: { type: Number, default: 0 },
-})
-const emit = defineEmits(['select', 'close'])
+<script lang="ts">
+/* One row of the menu. A row is either a separator, a submenu parent
+   (`children`), or a command (`action`); `disabled` greys it out. Lives
+   in a plain <script> block so callers can import the type. */
+export interface CtxItem {
+  label?: string
+  icon?: string
+  action?: string
+  hint?: string
+  bold?: boolean
+  disabled?: boolean
+  separator?: boolean
+  children?: CtxItem[]
+}
+</script>
 
-const root = ref(null)
+<script setup lang="ts">
+const props = withDefaults(
+  defineProps<{
+    items: CtxItem[]
+    x?: number
+    y?: number
+  }>(),
+  { x: 0, y: 0 },
+)
+
+const emit = defineEmits<{
+  select: [action: string | undefined]
+  close: []
+}>()
+
+const root = ref<HTMLElement | null>(null)
 const openIndex = ref(-1)
 const pos = reactive({ x: props.x, y: props.y })
 
-function choose(item) {
+function choose(item: CtxItem) {
   if (item.disabled || item.children) return
   emit('select', item.action)
   emit('close')
@@ -70,10 +93,10 @@ function clamp() {
   if (props.y + r.height > window.innerHeight) pos.y = Math.max(pad, window.innerHeight - r.height - pad)
 }
 
-function onDocDown(e) {
-  if (root.value && !root.value.contains(e.target)) emit('close')
+function onDocDown(e: MouseEvent) {
+  if (root.value && !root.value.contains(e.target as Node | null)) emit('close')
 }
-function onKey(e) { if (e.key === 'Escape') emit('close') }
+function onKey(e: KeyboardEvent) { if (e.key === 'Escape') emit('close') }
 function onBlur() { emit('close') }
 
 onMounted(() => {

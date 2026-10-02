@@ -49,7 +49,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { profile, fullLocation } from '~/data/profile'
 
 useHead({

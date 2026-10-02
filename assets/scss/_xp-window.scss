@@ -1,0 +1,41 @@
+/* ── Shared window chrome ──────────────────────────
+   The Luna frame and title bar, used by both the pinned Explorer
+   window (layouts/default.vue) and every app window (XpWindow.vue).
+   Each component adds its own layout on top — the Explorer is a CSS
+   grid of six rows, an app window a two-row flex column — and its own
+   maximized/minimized overrides, which are scoped and so win on
+   specificity. Keep only what is genuinely common here. */
+
+.xp-frame {
+  /* XP.css .window frame: a 3px layered blue bevel drawn with inset
+     shadows. Side padding reveals it alongside the body; the title bar
+     bleeds back over it (margin: 0 -3px) to stay flush at the top.
+     The outer drop shadow stays per-component — app windows float
+     higher than the pinned Explorer. */
+  border: none;
+  border-radius: 8px 8px 0 0;
+  padding: 0 3px 3px;
+  overflow: hidden;
+  background: var(--xp-window);
+  font-family: var(--font-family);
+}
+
+.xp-frame-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* Bleed 3px over the frame's side padding so the title bar sits flush
+     with the outer bevel, exactly like XP.css's .title-bar. */
+  margin: 0 -3px;
+  padding: 0 3px 0 6px;
+  /* Exact Luna gradient + inset text shadow from XP.css .title-bar */
+  background: var(--xp-luna-titlebar);
+  color: var(--text-white);
+  font-family: var(--font-family-title);
+  font-weight: bold;
+  font-size: 13px;
+  text-shadow: 1px 1px #0f1089;
+  border-radius: 8px 8px 0 0;
+  cursor: grab;
+  user-select: none;
+}

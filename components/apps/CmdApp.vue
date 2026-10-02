@@ -17,7 +17,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { profile } from '~/data/profile'
 
 /* Rendered inside an <XpWindow>; `winId` lets the `exit` command close
@@ -31,15 +31,23 @@ const wm = useWindows()
 const router = useRouter()
 
 const prompt = 'C:\\Portfolio>'
-const lines = ref([])
+
+/** One printed row; `cls` picks a colour class (dim / err / accent). */
+interface Line {
+  text: string
+  cls: string
+}
+
+const lines = ref<Line[]>([])
 const current = ref('')
-const history = ref([])
+const history = ref<string[]>([])
 let hIndex = -1
 
-const screen = ref(null)
-const input = ref(null)
+const screen = ref<HTMLElement | null>(null)
+const input = ref<HTMLInputElement | null>(null)
 
-const ROUTES = {
+/* Where `cd`/`start` can go: a router path, or `app:<key>` for a window. */
+const ROUTES: Record<string, string> = {
   home: '/', '~': '/', '..': '/',
   about: '/about',
   contact: '/contact',
@@ -69,13 +77,13 @@ function focusInput() {
   nextTick(() => input.value && input.value.focus())
 }
 
-function go(dest) {
+function go(dest: string | undefined) {
   const key = (dest || '').toLowerCase()
   const target = ROUTES[key]
   if (!target) { print(`The system cannot find the path specified: ${dest}`, 'err'); return }
   if (target.startsWith('app:')) {
     print(`Launching ${key} …`, 'dim')
-    wm.open(target.slice(4))
+    wm.open(target.slice(4) as AppKey)
   } else {
     print(`Opening ${target} …`, 'dim')
     router.push(target)
@@ -107,7 +115,7 @@ const COMMANDS = {
       ['<DIR>', 'games'], ['', 'resume.pdf'], ['', 'contact.txt'], ['', 'readme.txt'],
     ]
     for (const [kind, name] of items) {
-      print(`01/01/2001  09:00 AM    ${kind.padEnd(8)} ${name}`)
+      print(`01/01/2001  09:00 AM    ${(kind ?? '').padEnd(8)} ${name}`)
     }
     print('')
     print('               3 File(s)          4 Dir(s)')
@@ -120,7 +128,7 @@ const COMMANDS = {
     print('')
     print("Try:  start about   |   start pacman", 'dim')
   },
-  echo(args) { print(args.join(' ')) },
+  echo(args: string[]) { print(args.join(' ')) },
   ver() { print(''); print('Microsoft Windows XP [Version 5.1.2600]'); print('') },
   date() { print(`The current date is: ${new Date().toDateString()}`) },
   time() { print(`The current time is: ${new Date().toLocaleTimeString()}`) },
@@ -139,19 +147,21 @@ const COMMANDS = {
   color() { print('♦ Nice try — but this terminal likes silver on black.', 'accent') },
   cls() { lines.value = [] },
   clear() { lines.value = [] },
-  cd(args) { go(args[0]) },
-  start(args) { go(args[0]) },
-  open(args) { go(args[0]) },
+  cd(args: string[]) { go(args[0]) },
+  start(args: string[]) { go(args[0]) },
+  open(args: string[]) { go(args[0]) },
   exit() { wm.close(props.winId) },
 }
 
-function run(raw) {
+type Command = keyof typeof COMMANDS
+
+function run(raw: string) {
   const trimmed = raw.trim()
   print(`${prompt}${raw}`)
   if (!trimmed) return
   history.value.push(trimmed)
-  const [cmd, ...args] = trimmed.split(/\s+/)
-  const fn = COMMANDS[cmd.toLowerCase()]
+  const [cmd = '', ...args] = trimmed.split(/\s+/)
+  const fn = COMMANDS[cmd.toLowerCase() as Command] as ((args: string[]) => void) | undefined
   if (fn) {
     fn(args)
   } else {
@@ -160,7 +170,7 @@ function run(raw) {
   }
 }
 
-function onKey(e) {
+function onKey(e: KeyboardEvent) {
   /* The terminal owns keystrokes while focused — keep them away from any
      global keydown handlers (e.g. the Pac-Man WASD controls). */
   e.stopPropagation()
@@ -173,13 +183,13 @@ function onKey(e) {
     e.preventDefault()
     if (!history.value.length) return
     hIndex = hIndex < 0 ? history.value.length - 1 : Math.max(0, hIndex - 1)
-    current.value = history.value[hIndex]
+    current.value = history.value[hIndex] ?? ''
   } else if (e.key === 'ArrowDown') {
     e.preventDefault()
     if (hIndex < 0) return
     hIndex = hIndex + 1
     if (hIndex >= history.value.length) { hIndex = -1; current.value = '' }
-    else current.value = history.value[hIndex]
+    else current.value = history.value[hIndex] ?? ''
   } else if (e.key === 'c' && e.ctrlKey) {
     print(`${prompt}${current.value}^C`)
     current.value = ''

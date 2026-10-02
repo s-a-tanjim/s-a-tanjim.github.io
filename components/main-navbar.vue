@@ -84,7 +84,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { profile, shortLocation } from '~/data/profile'
 
 const emit = defineEmits(['navigate'])
@@ -96,7 +96,10 @@ const open = reactive({
   details: true,
 })
 
-function toggle(key) {
+/* The collapsible task-pane sections, keyed by `open`'s own fields. */
+type PaneKey = keyof typeof open
+
+function toggle(key: PaneKey) {
   open[key] = !open[key]
 }
 

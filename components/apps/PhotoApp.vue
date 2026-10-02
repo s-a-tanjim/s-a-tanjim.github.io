@@ -9,7 +9,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 /* Windows Picture and Fax Viewer, rendered inside an <XpWindow>. */
 </script>
 
