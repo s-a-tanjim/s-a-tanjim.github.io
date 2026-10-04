@@ -212,6 +212,26 @@ interface CtxMenu {
 const route = useRoute()
 const router = useRouter()
 
+/* ── Wallpaper ───────────────────────────────────────
+   The original is a 3840px JPEG. Serve a WebP sized to the viewport
+   instead (AVIF came out larger for this image); browsers without
+   image-set() type() support keep the JPEG declared in _core.scss. */
+const img = useImage()
+const wallpaper = (width: number) => {
+  const url = img('/img/xp-wallpaper.jpg', { width, format: 'webp', quality: 60 })
+  return `html body{background-image:image-set(url("${url}") type("image/webp"))}`
+}
+useHead({
+  style: [{
+    key: 'xp-wallpaper',
+    innerHTML: [
+      wallpaper(1280),
+      `@media (min-width:1281px){${wallpaper(1920)}}`,
+      `@media (min-width:1921px){${wallpaper(2560)}}`,
+    ].join(''),
+  }],
+})
+
 /* ── Window manager ──────────────────────────────────
    All windows (the pinned Portfolio explorer + every app window)
    share one z-order, focus model and taskbar. To add a tool: create a

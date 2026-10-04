@@ -2,10 +2,12 @@
   <div class="xp-startmenu" @click.self="emit('close')">
     <div class="sm-panel">
       <div class="sm-header">
-        <img
+        <NuxtImg
           :src="profile.avatar.src"
-          :srcset="profile.avatar.srcset"
-          sizes="44px"
+          width="44"
+          height="44"
+          densities="x1 x2"
+          format="webp"
           alt=""
           class="sm-avatar"
         />

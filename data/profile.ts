@@ -9,8 +9,8 @@ export interface Profile {
   /** ISO-ish short code used in the compact location string. */
   countryShort: string
   education: string
-  /** Responsive avatar: a default src plus a srcset of widths. */
-  avatar: { src: string; srcset: string }
+  /** Avatar source; @nuxt/image generates the responsive sizes. */
+  avatar: { src: string }
   socials: { github: string; linkedin: string; blog: string }
   site: { url: string; thumbnail: string }
 }
@@ -26,11 +26,10 @@ export const profile = {
   education: 'BSc in Computer Science',
   avatar: {
     src: '/img/sat.jpg',
-    srcset: '/img/sat-250.jpg 250w, /img/sat-300.jpg 300w, /img/sat.jpg 600w',
   },
   socials: {
     github: 'https://github.com/s-a-tanjim',
-    linkedin: 'https://bd.linkedin.com/in/satanjim',
+    linkedin: 'https://www.linkedin.com/in/satanjim',
     blog: 'https://medium.com/@satanjim',
   },
   site: {

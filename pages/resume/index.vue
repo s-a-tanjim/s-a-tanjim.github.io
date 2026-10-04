@@ -2,11 +2,16 @@
   <div>
     <div class="container resume">
       <h1 style="display: none">Resume</h1>
-      <a class="xp-btn primary download-btn" href="/cv/s-a-tanjim-CV.pdf" download>
+      <a class="xp-btn primary download-btn" :href="cvUrl" download>
         Download PDF
       </a>
-      <img src="/cv/cv-img-1.png" class="cv-img" alt="CV" />
-      <img src="/cv/cv-img-2.png" class="cv-img" alt="CV" />
+      <object :data="cvUrl" type="application/pdf" class="cv-frame">
+        <!-- Shown where the browser can't render PDFs inline (most mobile browsers) -->
+        <p>
+          Your browser can't display the PDF here.
+          <a :href="cvUrl" target="_blank" rel="noopener">Open the resume</a> instead.
+        </p>
+      </object>
     </div>
   </div>
 </template>
@@ -14,12 +19,20 @@
 <script setup lang="ts">
 import { profile } from '~/data/profile'
 
+const cvUrl = '/cv/Shoeb-Ahmed-Tanjim-CV.pdf'
+
 useHead({
   title: `Resume | ${profile.username}`,
-  meta: [{
-    name: 'description',
-    content: `Resume | ${profile.username} | Personal Website`
-  }]
+  meta: [
+    {
+      name: 'description',
+      content: `Resume | ${profile.username} | Personal Website`
+    },
+    {
+      name: 'robots',
+      content: 'noindex, nofollow, noarchive'
+    }
+  ]
 })
 </script>
 
@@ -33,9 +46,9 @@ useHead({
   margin-bottom: 3rem;
 }
 
-.cv-img {
+.cv-frame {
   width: 100%;
-  margin: 0.25rem 0;
+  height: 80vh;
+  border: 0;
 }
-
 </style>

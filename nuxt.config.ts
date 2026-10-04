@@ -3,7 +3,7 @@ import { profile, tagline } from './data/profile'
 export default defineNuxtConfig({
   app: {
     head: {
-      charset: 'utf-16',
+      charset: 'utf-8',
       title: profile.name,
       htmlAttrs: {
         lang: 'en'
@@ -95,6 +95,16 @@ export default defineNuxtConfig({
       ],
 
     }
+  },
+
+  modules: ['@nuxt/image'],
+
+  /* Images are resized and converted to WebP (JPEG fallback) at build time
+     (IPX) or, when built on Netlify, on demand by the Netlify Image CDN.
+     AVIF is left out: for these images it came out larger than WebP. */
+  image: {
+    format: ['webp'],
+    quality: 70,
   },
 
   css: [

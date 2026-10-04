@@ -34,7 +34,7 @@
           class="card-container"
         >
           <div class="img-container">
-            <img :src="data.img_src" class="card-img" :alt="data.title" />
+            <NuxtPicture :src="data.img_src" :img-attrs="{ class: 'card-img' }" :alt="data.title" sizes="sm:100vw lg:300px" loading="lazy" />
           </div>
           <div class="info-container" style="color: #111">
             <div>
@@ -130,7 +130,7 @@ const projects: Project[] = [
       'A story posting web-app developing for BiTechX. I worked for both frontend and backend with the BiTechX team.',
     features: '',
     tech_stack: 'NuxtJS | Laravel | AWS | Docker',
-    img_src: '/img/works/hootstory-600.jpg',
+    img_src: '/img/works/hootstory.jpg',
     github_link: '',
     live_site: 'https://hootstory.com',
   },

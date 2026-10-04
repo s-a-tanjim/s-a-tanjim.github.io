@@ -1,7 +1,7 @@
 <template>
   <div class="photo-app">
     <div class="photo-stage">
-      <img src="/img/me/about-img.jpg" alt="about-img.jpg" draggable="false" />
+      <NuxtPicture src="/img/me/about-img.jpg" alt="about-img.jpg" :img-attrs="{ draggable: 'false' }" sizes="sm:100vw md:800px" loading="lazy" />
     </div>
     <footer class="photo-statusbar">
       <span>C:\Portfolio\My Pictures\about-img.jpg</span>

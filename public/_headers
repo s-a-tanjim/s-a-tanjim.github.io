@@ -1,0 +1,10 @@
+# Keep the resume out of search engines. PDFs can't carry a <meta> tag,
+# so the noindex has to be sent as a response header.
+/cv/*
+  X-Robots-Tag: noindex, nofollow, noarchive
+
+/resume
+  X-Robots-Tag: noindex, nofollow, noarchive
+
+/resume/*
+  X-Robots-Tag: noindex, nofollow, noarchive

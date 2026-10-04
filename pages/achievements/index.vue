@@ -12,7 +12,7 @@
         >
           <div class="card-container">
             <div class="img-container">
-              <img :src="data.img_src" class="card-img" :alt="data.title" />
+              <NuxtPicture :src="data.img_src" :img-attrs="{ class: 'card-img' }" :alt="data.title" sizes="sm:100vw md:50vw lg:33vw" loading="lazy" />
             </div>
             <div class="text-container" style="color: #111">
               <h5 style="font-weight: bold">{{ data.title }}</h5>

@@ -13,10 +13,13 @@
       <fieldset class="xp-group">
         <legend>Welcome</legend>
         <div class="profile-row">
-          <img
+          <NuxtImg
             :src="profile.avatar.src"
-            :srcset="profile.avatar.srcset"
-            sizes="120px"
+            width="120"
+            height="120"
+            densities="x1 x2"
+            format="webp"
+            fetchpriority="high"
             class="avatar"
             :alt="profile.name"
           />
